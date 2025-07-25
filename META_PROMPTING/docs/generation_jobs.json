@@ -1,0 +1,346 @@
+{
+  "jobs": [
+    {
+      "category": "personas",
+      "name": "empathetic_guide.txt",
+      "description": "Write a persona trait for an empathetic and learner-centric mentor. The text should focus on reassuring the user, acknowledging that topics can be complex, and framing explanations from the user's likely point of view (the 'Cognitive Mirror' principle).",
+      "output_path": "components/personas/empathetic_guide.txt"
+    },
+    {
+      "category": "personas",
+      "name": "precise_partner.txt",
+      "description": "Write a persona trait for an expert, collaborative partner. The text should focus on operating with speed, precision, and consistency, basing its work only on the context provided and assuming each session is a new, self-contained task.",
+      "output_path": "components/personas/precise_partner.txt"
+    },
+    {
+      "category": "personas",
+      "name": "meticulous_auditor.txt",
+      "description": "Write a persona trait for a detail-oriented code reviewer. The text should establish a persona that is skeptical, constructive, and an expert in identifying 'code smells,' enforcing best practices, and suggesting more idiomatic solutions.",
+      "output_path": "components/personas/meticulous_auditor.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "confidence_based_sync.txt",
+      "description": "Write a protocol for maintaining state confidence in a read-write context. It must describe the 'propose a verification step -> assume success by default -> request full file on failure or ambiguity' workflow to minimize redundant data transfer.",
+      "output_path": "components/protocols/confidence_based_sync.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "turn_by_turn_dialogue.txt",
+      "description": "Write a protocol for a turn-by-turn mentorship dialogue. It must describe the core loop: '1. Ask the user to perform a single, small action. 2. Wait for the user's response. 3. Analyze the provided clue and explain its significance. 4. Initiate a checkpoint to ensure understanding before proceeding.'",
+      "output_path": "components/protocols/turn_by_turn_dialogue.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "code_review_pass.txt",
+      "description": "Write a protocol for delivering a code review. The text must instruct the LLM to return a list of numbered, non-blocking suggestions. Each suggestion must include a clear 'Rationale' section explaining the benefit of the proposed change.",
+      "output_path": "components/protocols/code_review_pass.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "connection_hopping.txt",
+      "description": "Write a protocol for 'Connection Hopping' during codebase exploration. The text must instruct the LLM that after explaining a file or concept, it should proactively suggest 2-3 logical next steps for investigation based on the code's direct connections (e.g., function calls, class imports, foreign keys).",
+      "output_path": "components/protocols/connection_hopping.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "preserve_functional_attributes.txt",
+      "description": "Write a non-negotiable constraint for frontend refactoring. The text must strictly forbid any modification, addition, or removal of `id`, `data-testid`, HTMX (`hx-*`), and Alpine.js (`x-*`, `@*`, `:*`) attributes to ensure tests and functionality are preserved.",
+      "output_path": "components/constraints/preserve_functional_attributes.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_html_restructure.txt",
+      "description": "Write a non-negotiable constraint for stylistic refactoring tasks. The text must strictly forbid the adding, removing, or reordering of any HTML elements. The only permitted change is the modification of `class` attributes.",
+      "output_path": "components/constraints/no_html_restructure.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_backend_changes.txt",
+      "description": "Write a non-negotiable constraint for frontend-focused tasks. The text must establish that the backend code is considered immutable and cannot be modified unless a special 'Backend Exception Clause' is explicitly invoked and justified with evidence.",
+      "output_path": "components/constraints/no_backend_changes.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "output_raw_code_only.txt",
+      "description": "Write a non-negotiable constraint for the final output format when generating code. The text must instruct the LLM that its entire response should be ONLY the raw code block, with no conversational text, explanations, or Markdown formatting.",
+      "output_path": "components/constraints/output_raw_code_only.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "principle_of_completeness.txt",
+      "description": "Write a non-negotiable constraint to prevent incomplete code generation. The text must instruct the LLM to always provide complete, functional code blocks (entire files or functions) and must strictly forbid omitting content for brevity with placeholders like '...'.",
+      "output_path": "components/constraints/principle_of_completeness.txt"
+    },
+    {
+      "category": "personas",
+      "name": "digital_detective.txt",
+      "description": "Write a persona trait for a systematic debugger. The persona should focus on forming hypotheses, gathering evidence from logs and error messages, and proposing targeted experiments to isolate the root cause of a problem.",
+      "output_path": "components/personas/digital_detective.txt"
+    },
+    {
+      "category": "personas",
+      "name": "boilerplate_architect.txt",
+      "description": "Write a persona trait for an expert in project scaffolding. This persona should specialize in creating clean, conventional project structures, starter files (like package.json, Dockerfile, .gitignore), and common boilerplate code according to industry best practices.",
+      "output_path": "components/personas/boilerplate_architect.txt"
+    },
+    {
+      "category": "personas",
+      "name": "performance_tuner.txt",
+      "description": "Write a persona trait for a performance optimization expert. This persona should focus on identifying and diagnosing bottlenecks, such as N+1 queries, inefficient algorithms, large asset sizes, or slow rendering, and suggest concrete, measurable improvements.",
+      "output_path": "components/personas/performance_tuner.txt"
+    },
+    {
+      "category": "personas",
+      "name": "api_integration_specialist.txt",
+      "description": "Write a persona trait for a specialist in API integration. This persona is an expert at reading third-party API documentation, handling various authentication schemes (OAuth, API Keys), shaping request data, and gracefully handling API responses and errors.",
+      "output_path": "components/personas/api_integration_specialist.txt"
+    },
+    {
+      "category": "personas",
+      "name": "framework_migration_guide.txt",
+      "description": "Write a persona trait for a migration expert. This persona specializes in guiding the conversion of a codebase from one framework to another (e.g., Express to NestJS, Vue 2 to Vue 3), focusing on idiomatic translation of concepts and patterns.",
+      "output_path": "components/personas/framework_migration_guide.txt"
+    },
+    {
+      "category": "personas",
+      "name": "security_auditor.txt",
+      "description": "Write a persona trait for a security-focused reviewer. This persona is an expert in identifying common vulnerabilities like OWASP Top 10 (XSS, SQL Injection, etc.), insecure configurations, and potential data leaks.",
+      "output_path": "components/personas/security_auditor.txt"
+    },
+    {
+      "category": "personas",
+      "name": "readability_advocate.txt",
+      "description": "Write a persona trait for a code quality expert focused on clarity and maintainability. This persona champions clean code principles, suggesting improvements to variable naming, function complexity, and structural logic to make the code more human-readable.",
+      "output_path": "components/personas/readability_advocate.txt"
+    },
+    {
+      "category": "personas",
+      "name": "language_translator.txt",
+      "description": "Write a persona trait for a polyglot programmer who excels at translating code from one language to another (e.g., Python to Go). The focus is on creating idiomatic, conventional code in the target language, not just a literal, line-for-line conversion.",
+      "output_path": "components/personas/language_translator.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "root_cause_analysis_drilldown.txt",
+      "description": "Write a protocol for systematically diagnosing a bug. It must instruct the LLM to follow a loop: 1. State a current hypothesis. 2. Ask the user for a specific piece of information (a log, a command output) to test it. 3. Based on the user's answer, either confirm the cause or refine the hypothesis and repeat.",
+      "output_path": "components/protocols/root_cause_analysis_drilldown.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "reproduction_step_validator.txt",
+      "description": "Write a protocol for creating a minimal, reproducible example. The LLM must guide the user to strip away irrelevant code and dependencies, validating each step until they have the smallest possible snippet that demonstrates the bug.",
+      "output_path": "components/protocols/reproduction_step_validator.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "scaffolding_confirmation_loop.txt",
+      "description": "Write a protocol for generating a new project structure. The LLM must first propose a file and directory structure as a list or tree, ask the user for explicit approval, and only then proceed to generate the content for each approved file.",
+      "output_path": "components/protocols/scaffolding_confirmation_loop.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "performance_hypothesis_test.txt",
+      "description": "Write a protocol for validating a performance optimization. The LLM must instruct the user on how to benchmark the 'before' state, then provide the optimized code, and finally instruct the user on how to run the exact same benchmark on the 'after' state to prove the improvement.",
+      "output_path": "components/protocols/performance_hypothesis_test.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "feature_implementation_plan.txt",
+      "description": "Write a protocol for adding a new feature. The LLM must first break the feature request down into a plan (e.g., '1. Add new column to DB. 2. Create new API endpoint. 3. Add button to UI.'), get user approval for the plan, then execute each step.",
+      "output_path": "components/protocols/feature_implementation_plan.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "schema_migration_walkthrough.txt",
+      "description": "Write a protocol for database schema migration. The LLM must guide the user through a three-step process: 1. Elicit the desired model changes. 2. Generate the migration script (e.g., SQL DDL or ORM commands). 3. Explicitly point out any changes that are destructive (e.g., dropping a column).",
+      "output_path": "components/protocols/schema_migration_walkthrough.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "file_by_file_translation.txt",
+      "description": "Write a protocol for large-scale code migration. The LLM must process one file at a time, maintain context on the overall project structure, and for each source file provided by the user, return only the complete, translated content of the new target file.",
+      "output_path": "components/protocols/file_by_file_translation.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "security_threat_modeling.txt",
+      "description": "Write a protocol for a security review. It must guide the user to first identify key assets, user roles, and system entry points. Only after this threat model is established will the LLM proceed to analyze the code for vulnerabilities related to those threats.",
+      "output_path": "components/protocols/security_threat_modeling.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "api_documentation_review.txt",
+      "description": "Write a protocol for generating user-facing documentation for an API endpoint. The LLM must analyze a code block and then generate structured documentation including the endpoint's path, method, required parameters, and example success/error responses.",
+      "output_path": "components/protocols/api_documentation_review.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_placeholder_logic.txt",
+      "description": "Write a non-negotiable constraint for code generation. The text must strictly forbid generating functions or methods with empty bodies or placeholder comments like '// TODO: Implement' or 'pass'. Every generated function must have a minimal, functional implementation.",
+      "output_path": "components/constraints/no_placeholder_logic.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "preserve_public_api.txt",
+      "description": "Write a non-negotiable constraint for refactoring tasks. The text must strictly forbid any changes to public-facing contracts. This includes function names, parameter order, return types, class names, or API endpoint URLs that are not explicitly marked as private.",
+      "output_path": "components/constraints/preserve_public_api.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_magic_values.txt",
+      "description": "Write a non-negotiable constraint for code improvement. The text must strictly forbid the use of 'magic values' (unexplained numbers or strings). All such values must be refactored into named constants with clear, descriptive names.",
+      "output_path": "components/constraints/no_magic_values.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "idempotent_operations.txt",
+      "description": "Write a non-negotiable constraint for tasks that modify state. Any generated code that creates or updates resources must be idempotent, meaning it can be safely executed multiple times without creating duplicate resources or causing errors.",
+      "output_path": "components/constraints/idempotent_operations.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "data_loss_warning.txt",
+      "description": "Write a non-negotiable constraint for data transformation or migration tasks. The text must instruct the LLM to halt and issue an explicit, high-visibility warning if any proposed operation could result in data loss, such as dropping a database column or table.",
+      "output_path": "components/constraints/data_loss_warning.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "preserve_test_logic.txt",
+      "description": "Write a non-negotiable constraint for migrating test suites. The text must strictly require that the core assertion and logic of each test case remain functionally identical. Only the syntax and framework-specific boilerplate are allowed to change.",
+      "output_path": "components/constraints/preserve_test_logic.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "reference_official_docs.txt",
+      "description": "Write a non-negotiable constraint for auditing tasks. The text must require that for every suggestion based on a language or framework standard, the LLM must cite the specific rule or provide a link to the official documentation (e.g., 'As per PEP 8...' or 'See the MDN documentation for...').",
+      "output_path": "components/constraints/reference_official_docs.txt"
+    },
+    {
+      "category": "personas",
+      "name": "career_sherpa.txt",
+      "description": "Write a persona trait for a career coach and long-term strategist. This persona should focus on helping the user map out career goals, identify skill gaps, and make decisions based on a 5-10 year horizon, rather than short-term project needs.",
+      "output_path": "components/personas/career_sherpa.txt"
+    },
+    {
+      "category": "personas",
+      "name": "socratic_inquisitor.txt",
+      "description": "Write a persona trait for a mentor who teaches purely through questioning. This persona should never provide direct answers, but instead respond to user queries with probing questions that force the user to reason from first principles and discover the answers themselves.",
+      "output_path": "components/personas/socratic_inquisitor.txt"
+    },
+    {
+      "category": "personas",
+      "name": "systems_thinker.txt",
+      "description": "Write a persona trait for an expert in systems thinking. This persona explains concepts not in isolation, but by focusing on their interconnectedness, feedback loops, and second-order consequences within the larger system.",
+      "output_path": "components/personas/systems_thinker.txt"
+    },
+    {
+      "category": "personas",
+      "name": "mental_model_master.txt",
+      "description": "Write a persona trait for a mentor who explains complex topics by explicitly referencing and applying established mental models (e.g., First Principles Thinking, Inversion, Circle of Competence, Occam's Razor).",
+      "output_path": "components/personas/mental_model_master.txt"
+    },
+    {
+      "category": "personas",
+      "name": "clarity_communicator.txt",
+      "description": "Write a persona trait for a writing and presentation coach. This persona specializes in helping the user refine their communication, translating complex technical ideas into clear, concise language tailored for a specific audience (e.g., executives, junior developers, non-technical users).",
+      "output_path": "components/personas/clarity_communicator.txt"
+    },
+    {
+      "category": "personas",
+      "name": "tech_trend_analyst.txt",
+      "description": "Write a persona trait for a technology analyst. This persona helps the user evaluate the hype vs. reality of new technologies by analyzing them based on adoption curves, underlying problems they solve, and potential ecosystem impact.",
+      "output_path": "components/personas/tech_trend_analyst.txt"
+    },
+    {
+      "category": "personas",
+      "name": "mock_interview_panellist.txt",
+      "description": "Write a persona trait for a professional interviewer. This persona is skilled at conducting realistic behavioral or system design interviews, asking follow-up questions, and providing constructive, actionable feedback on the user's performance.",
+      "output_path": "components/personas/mock_interview_panellist.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "learning_curriculum_builder.txt",
+      "description": "Write a protocol for creating a structured learning plan. The LLM must guide the user to define a topic and a goal, then generate a step-by-step curriculum, starting with foundational concepts and progressing to advanced topics, including suggestions for projects.",
+      "output_path": "components/protocols/learning_curriculum_builder.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "resume_critique_session.txt",
+      "description": "Write a protocol for iterative resume improvement. The LLM must analyze a resume against a specific job description, providing numbered suggestions for improvement. It then waits for the user to provide a revised version before offering the next round of feedback.",
+      "output_path": "components/protocols/resume_critique_session.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "first_principles_deconstruction.txt",
+      "description": "Write a protocol for breaking down a complex topic to its core truths. The LLM must guide the user to repeatedly question their assumptions about a topic until they are left with only fundamental, undeniable principles, from which they can reason back up.",
+      "output_path": "components/protocols/first_principles_deconstruction.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "decision_journaling_framework.txt",
+      "description": "Write a protocol to guide the user through a structured decision-making process. The LLM must prompt the user to define the problem, list available options, state the expected outcomes, and define the 'why' behind their choice before committing.",
+      "output_path": "components/protocols/decision_journaling_framework.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "presentation_dry_run.txt",
+      "description": "Write a protocol for practicing a presentation. The LLM asks the user to present one slide or section at a time, and after each part, provides feedback on clarity, impact, and audience engagement before moving to the next section.",
+      "output_path": "components/protocols/presentation_dry_run.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "goal_setting_with_okrs.txt",
+      "description": "Write a protocol to establish professional goals using the OKR (Objectives and Key Results) framework. The LLM guides the user to define an ambitious Objective, and then to create 3-5 specific, measurable Key Results to track progress towards it.",
+      "output_path": "components/protocols/goal_setting_with_okrs.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "behavioral_interview_prep.txt",
+      "description": "Write a protocol for mock behavioral interviews. The LLM will present a standard interview question (e.g., 'Tell me about a time you had a conflict'), wait for the user's response using the STAR method, and then provide feedback on the story's structure and impact.",
+      "output_path": "components/protocols/behavioral_interview_prep.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "focus_on_principles_not_code.txt",
+      "description": "Write a non-negotiable constraint to keep the discussion at a strategic, conceptual level. The text must strictly forbid generating code examples or implementation details, focusing instead on the underlying principles, patterns, and mental models.",
+      "output_path": "components/constraints/focus_on_principles_not_code.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "challenge_underlying_assumptions.txt",
+      "description": "Write a non-negotiable constraint that requires the LLM to actively question the user's premises. For any statement the user makes, the LLM must gently probe the assumptions behind it before proceeding (e.g., 'What leads you to believe that is the case?').",
+      "output_path": "components/constraints/challenge_underlying_assumptions.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "long_term_horizon_only.txt",
+      "description": "Write a non-negotiable constraint to filter all advice through a long-term lens. The text must forbid suggestions that optimize for short-term convenience and require that all recommendations be justified based on their likely impact in 5 years or more.",
+      "output_path": "components/constraints/long_term_horizon_only.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_direct_answers_socratic_mode.txt",
+      "description": "Write a non-negotiable constraint for a Socratic learning session. The text must strictly forbid the LLM from providing a direct answer to any question. Its only valid response format is another question that guides the user toward their own conclusion.",
+      "output_path": "components/constraints/no_direct_answers_socratic_mode.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "cite_thinkers_and_sources.txt",
+      "description": "Write a non-negotiable constraint requiring attribution for major ideas. When introducing a concept or mental model, the LLM must cite the original thinker or source (e.g., 'This is an application of Daniel Kahneman's 'Thinking, Fast and Slow'').",
+      "output_path": "components/constraints/cite_thinkers_and_sources.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "mandate_second_order_thinking.txt",
+      "description": "Write a non-negotiable constraint to force consideration of consequences. After any proposed solution or decision, the LLM must always ask, 'And then what happens?' to prompt an analysis of the second- and third-order effects.",
+      "output_path": "components/constraints/mandate_second_order_thinking.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "require_clarifying_analogies.txt",
+      "description": "Write a non-negotiable constraint that every explanation of a complex or abstract topic must be immediately followed by a simple, concrete analogy or metaphor to ground the user's understanding.",
+      "output_path": "components/constraints/require_clarifying_analogies.txt"
+    }
+  ]
+}

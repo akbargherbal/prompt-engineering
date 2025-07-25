@@ -1,0 +1,1 @@
+Your response must adhere to a strict output format. Your entire response must be the raw code block and nothing else. Do not provide any conversational text, explanations, or surrounding Markdown code fences (```). The output must be only the pure, unadorned code, suitable for being piped directly into a file.

@@ -1,0 +1,263 @@
+
+=== START of worksheet ID: 003 ===
+Of course. As a Master Curriculum Designer and AI Pedagogy Expert, I will now create the complete content for "The Rulebook" worksheet, meticulously following every principle of the provided Style Guide.
+
+---
+
+# The Rulebook
+### Phase 3 of the Developer's Mise en Place
+
+Congratulations on reaching Phase 3! You’ve documented your pain and gathered your evidence. Now it's time to define the rules of the game. "The Rulebook" is where you establish the 'laws of physics' for your simulation. By defining your constraints, success criteria, and anti-goals *before* you write the prompt, you force the LLM to think within your reality, leading to solutions that are not just clever, but practical, safe, and genuinely useful.
+
+Let's build the guardrails for our simulation.
+
+---
+
+## Step 1: Establish Your Constraints (The "Laws of Physics")
+
+**Why this matters:** Before you ask an LLM to design a solution, you must tell it what is and isn't possible. Constraints aren't limitations; they are the foundation of a realistic solution. By defining the technical, process, and resource boundaries, you prevent the simulation from suggesting a perfect-but-impossible system (like "rewrite it in Rust with a team of five engineers"). This step ensures the LLM's creativity is grounded in your project's reality.
+
+#### **1.1: What are the absolute technical constraints of the solution?**
+
+Think about the environment where this will run. What technologies are mandatory? What is strictly forbidden?
+
+_Example: The solution must be a single Python 3.9+ script. It can only use the standard library and the `requests` library, as no other external packages can be installed in the production environment. It cannot write to a database._
+
+>
+
+#### **1.2: What are the immovable process constraints?**
+
+Consider the workflow this solution must fit into. What inputs are fixed? What outputs are non-negotiable? Who interacts with this process?
+
+_Example: The script must read log data from a specific S3 bucket path. The input files are always gzipped JSONL files. The final output must be a new JSONL file uploaded to a different, specified S3 path._
+
+>
+
+#### **1.3: What are the key resource constraints?**
+
+Think about time, performance, and maintenance. How fast must this run? Who will maintain it? Are there budget limitations?
+
+_Example: The entire process must complete in under 5 minutes. The script will be maintained by junior developers, so it must be heavily commented and avoid complex abstractions. It cannot use any paid third-party APIs._
+
+>
+
+---
+
+## Step 2: Define Your Success Criteria (The "Winning Conditions")
+
+**Why this matters:** A simulation needs a clear target. Simply saying "fix the problem" is too vague. By defining precise, verifiable success criteria, you give the LLM a clear picture of what "done" looks like. This turns the simulation from a vague brainstorming session into a goal-oriented engineering exercise, producing a solution you can actually test and validate.
+
+#### **2.1: What is the single, primary outcome that defines success?**
+
+If the solution does only one thing perfectly, what would it be? This is your "Minimum Viable Success."
+
+_Example: A single, clean `merged_results.jsonl` file is created, containing the combined results of the original successful jobs and the newly successful re-run jobs._
+
+>
+
+#### **2.2: How will you objectively verify that the solution worked?**
+
+What specific, measurable checks can you perform to know, with certainty, that the outcome is correct? This is your acceptance test.
+
+_Example: I will verify success by checking three things: 1) The script exits with code 0. 2) The number of lines in the new `merged_results.jsonl` file equals the count of original successes plus the count of re-run successes. 3) No "failed" or "error" statuses exist in the final output file._
+
+>
+
+#### **2.3: Beyond the minimum, what would a "gold standard" solution include?**
+
+Think about bonus features that would make this solution exceptionally helpful. What would turn it from good to great?
+
+_Example: The "gold standard" solution would also output a brief summary to the console, like: "Processed 1000 log entries. Found 50 failures. Re-ran 50 jobs. 48 succeeded. Final output contains 998 successful results." It would also automatically archive the original log files it processed into a separate `processed/` directory._
+
+>
+
+---
+
+## Step 3: Set Your Anti-Goals (The "Failure Modes")
+
+**Why this matters:** Telling the simulation what *not* to do is just as important as telling it what to do. Anti-goals help you avoid solutions that are technically correct but practically disastrous. By explicitly stating undesirable outcomes (like corrupting data or creating a maintenance nightmare), you steer the LLM away from common pitfalls and toward a solution that is not only effective but also robust and safe.
+
+#### **3.1: What are the absolutely unacceptable side effects?**
+
+What potential outcome would be a deal-breaker, no matter how well the solution works otherwise?
+
+_Example: The solution absolutely must not modify or delete the original source log files. It must never lose the data from the originally successful jobs. It cannot hang indefinitely if an API call fails during the re-run process._
+
+>
+
+#### **3.2: What types of solutions or patterns do you want to explicitly avoid?**
+
+Have you tried things that didn't work? Are there common but "wrong" ways to solve this that you want the LLM to ignore?
+
+_Example: I want to avoid any solution that requires manual intervention, like a human having to copy/paste a list of failed IDs. I also want to avoid solutions that involve writing multiple, separate scripts that need to be run in a specific order._
+
+>
+
+#### **3.3: What would make this solution too complex or brittle to maintain?**
+
+Think about future-you. What would make this a nightmare to debug or update?
+
+_Example: Any solution that requires a complex configuration file would be too brittle. A solution that relies on parsing human-readable text from the logs instead of structured data (like JSON fields) would also be too fragile and likely to break._
+
+>
+
+---
+
+### You've Built The Rulebook!
+
+Excellent work. You have now defined the reality for your simulation. With these constraints, success criteria, and anti-goals, you have a powerful set of guardrails. This ensures the LLM's output will be tailored, safe, and directly applicable to your problem.
+
+**Next Up:** You're ready for the final step of your preparation: **The Assembly Line**, where you'll combine everything you've documented into a final, structured prompt to run your simulation.
+=== END of worksheet ID: 003 ===
+
+=== START of worksheet ID: 007 ===
+Of course. Here is the complete, user-ready Markdown content for "The Rulebook" worksheet, designed to strictly adhere to your specified Style Guide.
+
+---
+
+# Step 3: The Rulebook — Defining the Laws of Your System
+
+You've successfully documented the pain (**The Pain Journal**) and gathered your evidence (**The Evidence Locker**). Now it's time to define the rules of the game. For an LLM to act as a useful "Systems Simulator," it can't operate in a vacuum. It needs to understand the "physics" of your world—the hard constraints, the non-negotiable requirements, and the specific definition of a winning outcome. This worksheet is where you establish those laws.
+
+Completing this step ensures the LLM's proposed solution is not just clever, but also practical, safe, and aligned with your actual operational reality.
+
+***
+
+### 3.1 Establish Your Constraints: The "Physics of Reality"
+
+Before the LLM can design a solution, it needs to know what’s impossible. Without defined boundaries, an LLM might suggest using a technology you don't have, violating a security policy, or ignoring a critical performance requirement. By defining constraints upfront, you're not limiting the LLM's creativity; you're focusing it on a *viable* solution space. Think of this as teaching the simulator the fundamental laws of physics for your project.
+
+**What are the absolute, non-negotiable *technical* constraints of a solution?**
+Consider programming languages, required libraries, specific versions, APIs that *must* be used, or platforms it must run on.
+
+*Example: The solution must be a single Python 3.9+ script. It can only use the standard `requests`, `json`, and `csv` libraries; no third-party packages like Pandas are allowed. It must authenticate with our internal `JobQueue` API using a bearer token provided as an environment variable.*
+
+> Your Answer:
+
+**What are the absolute, non-negotiable *operational* constraints?**
+Think about performance, security, process, and resource limits. How fast must it run? What can't it touch? What are the deployment rules?
+
+*Example: The script must complete its entire run in under 90 seconds. It absolutely cannot write to the production database. All output and logs must be written to the designated S3 bucket (`s3://prod-log-script-output/`). It must not consume more than 256MB of memory.*
+
+> Your Answer:
+
+***
+
+### 3.2 Define Your Success Criteria: The "Definition of Done"
+
+An LLM's goal is to satisfy your prompt. If you're vague about what "success" means, you'll get a vague (and likely unhelpful) result. This section is where you get ruthlessly specific. Success isn't just "the code runs without errors." Success is "the original pain point is gone." You need to provide clear, measurable, and observable outcomes that prove the problem has been solved.
+
+**What is the single, primary objective of the solution?**
+If it could only do one thing perfectly, what would that be? Describe the ideal end-state that eliminates the manual work you documented in your Pain Journal.
+
+*Example: The solution must automatically parse a given log file, identify all entries marked with "FAILED_PROMPT," re-submit only those jobs to the queue, and then generate a new, clean results file that merges the original successes with the output from the re-run jobs.*
+
+> Your Answer:
+
+**How will you *know*, with certainty, that the solution has succeeded? What are the verifiable, observable outcomes?**
+List the specific, tangible artifacts or state changes you could point to as proof. How would you manually verify a successful run?
+
+*Example: 1) A single, merged CSV file named `[original-filename]-reprocessed.csv` exists in the output directory. 2) The script's log file contains the message "Processing complete. X failed items re-queued." and shows a zero exit code. 3) Checking the `JobQueue` monitor shows new jobs were created with the tag `re-run`.*
+
+> Your Answer:
+
+***
+
+### 3.3 Set Your Anti-Goals: The "Guardrails"
+
+Just as important as defining success is defining failure. An LLM might find a "clever" shortcut that technically works but creates new problems or misses the point entirely. Anti-goals act as guardrails, preventing the simulation from veering off-course into unhelpful, counter-productive, or dangerous territory. Explicitly stating what you *don't* want is one of the most powerful ways to guide the LLM toward a high-quality solution.
+
+**What common but undesirable solutions or side effects must the solution actively avoid?**
+Think about shortcuts that don't solve the real problem, or approaches that would be a nightmare to maintain.
+
+*Example: The solution must not modify the original log files in any way (they are immutable). It must not require setting up a new database or external service to track state. It must not simply re-run the entire original job from scratch, as that is too time-consuming and expensive.*
+
+> Your Answer:
+
+**What would be a technically functional but ultimately *unhelpful* solution that fails to solve the core pain?**
+This helps the LLM understand the *spirit* of the task, not just the letter. What's a "solution" that would still leave you with manual work?
+
+*Example: A solution that simply prints or emails a list of the failed prompt IDs would be unhelpful. The core problem is the manual toil of re-running them and merging the results, so any solution that still requires me to do that is a failure.*
+
+> Your Answer:
+=== END of worksheet ID: 007 ===
+
+=== START of worksheet ID: 011 ===
+Here is the complete, user-ready Markdown content for "The Rulebook" worksheet.
+
+***
+
+### **The Rulebook**
+
+You've documented the pain and gathered your evidence. Now it's time to define the laws of physics for your simulation. This is where you set the boundaries for the AI, ensuring its proposed solution is not just clever, but also practical, safe, and viable within the reality of your codebase.
+
+---
+
+#### **Step 1: Establish Your Constraints (The Physics of Your System)**
+
+**Why this is critical:** An LLM, left to its own devices, doesn't understand your project's specific limitations. It might suggest using a library you can't import, a language version you don't support, or a design pattern that violates your team's style guide. By defining constraints upfront, you are grounding the simulation in reality. You're telling the AI, "Don't break these fundamental laws when you design a solution."
+
+**1. What are the absolute, non-negotiable technical constraints the solution must adhere to?** Think about programming languages, frameworks, specific library versions, or environment limitations.
+
+*   _Example: The refactoring script must be written in Python 3.9+. It cannot introduce any new third-party dependencies besides the target `super-logger` library. The solution must run within our existing Docker-based development environment without requiring changes to the Dockerfile._
+
+> **Your Answer:**
+>
+>
+
+**2. Are there any performance, security, or coding style constraints that are inviolable?** This is where you encode your team's standards and non-functional requirements.
+
+*   _Example: The new logging initialization must not add more than 5ms to the application's startup time. All new code must be formatted with the `black` code formatter. The solution must not require any changes to our production IAM roles._
+
+> **Your Answer:**
+>
+>
+
+---
+
+#### **Step 2: Define Your Success Criteria (The Definition of 'Done')**
+
+**Why this is critical:** A vague goal leads to a vague solution. Asking an LLM to "fix the logging" is an invitation for a meandering, unhelpful response. By defining a precise, measurable 'Definition of Done,' you give the simulation a clear target. This transforms the AI from a brainstormer into a focused problem-solver aiming for a specific, verifiable outcome.
+
+**1. Functionally, what is the single most important outcome?** If the final solution does only one thing perfectly, what is it?
+
+*   _Example: The primary outcome is that all instances of `from old_service import api_client` are replaced with `from new_sdk.client import NewApiClient`, and all `api_client.call()` methods are correctly updated to the new `NewApiClient().make_request()` signature._
+
+> **Your Answer:**
+>
+>
+
+**2. How will you objectively measure or verify that the solution is successful?** What specific commands would you run or what would you look for to know, without a doubt, that it worked?
+
+*   _Example: Success will be confirmed if: 1) The application's full test suite passes with a `pytest` command. 2) A static analysis search for `"from old_service"` returns zero results in our primary application directory. 3) The refactored code successfully makes a test API call to the staging environment._
+
+> **Your Answer:**
+>
+>
+
+---
+
+#### **Step 3: State Your Anti-Goals (The Minefield)**
+
+**Why this is critical:** Sometimes, a solution can be technically correct but strategically wrong. It might solve the immediate problem while creating a new, bigger one. Anti-goals help the AI avoid these traps. You are explicitly mapping out the 'undesirable solutions' and 'negative side-effects,' thereby steering the simulation away from paths that lead to technical debt, security holes, or operational nightmares.
+
+**1. What are some 'technically correct' but undesirable approaches you want to explicitly forbid?** Think about shortcuts or "clever" solutions that would violate the spirit of the task.
+
+*   _Example: DO NOT simply create a wrapper class that makes the new SDK mimic the old API client's interface. The goal is to fully migrate to the new SDK's patterns, not to hide the old patterns behind another layer of abstraction. DO NOT just comment out the failing code._
+
+> **Your Answer:**
+>
+>
+
+**2. What potential negative side-effects must the solution avoid at all costs?** Think about what could go wrong in the code or the system as a result of this change.
+
+*   _Example: The solution must not change any public-facing API endpoints or their JSON response structures. It must not alter the core business logic contained within the functions being refactored. It absolutely must not introduce any changes that would cause database schema migrations to be required._
+
+> **Your Answer:**
+>
+>
+
+***
+
+Great work. You've now established a clear, bounded problem space. With these rules, constraints, and definitions of success, you've built the guardrails that will guide the LLM toward a high-quality, relevant solution. You're ready for the final step: **The Assembly Line.**
+=== END of worksheet ID: 011 ===

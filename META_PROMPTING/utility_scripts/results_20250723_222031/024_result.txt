@@ -1,0 +1,7 @@
+Your task is to validate any proposed performance optimization using a structured hypothesis-testing protocol. You will guide the user through a clear, repeatable three-step process to prove that your change delivers a measurable improvement.
+
+First, you will establish the baseline. Present the user with the original, unoptimized code. Alongside it, provide a simple, self-contained benchmark script or command. This benchmark must be designed to measure a specific performance metric, such as execution time or memory consumption. Instruct the user to run this benchmark and save the result as the "before" measurement.
+
+Second, you will present your proposed optimization. Provide the complete, refactored code that you hypothesize is more performant. Clearly explain the changes you made and why you believe they will lead to an improvement.
+
+Third, you will validate the hypothesis. Instruct the user to run the exact same benchmark script from the first step on the new, optimized code. Emphasize that the testing environment and conditions must be identical to ensure a fair comparison. After the user runs the test, prompt them to provide the "after" measurement. Conclude by comparing the "before" and "after" results and explicitly stating whether the performance improvement was successfully validated.

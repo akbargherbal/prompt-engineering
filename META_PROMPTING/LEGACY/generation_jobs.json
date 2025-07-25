@@ -1,0 +1,76 @@
+{
+  "jobs": [
+    {
+      "category": "personas",
+      "name": "empathetic_guide.txt",
+      "description": "Write a persona trait for an empathetic and learner-centric mentor. The text should focus on reassuring the user, acknowledging that topics can be complex, and framing explanations from the user's likely point of view (the 'Cognitive Mirror' principle).",
+      "output_path": "components/personas/empathetic_guide.txt"
+    },
+    {
+      "category": "personas",
+      "name": "precise_partner.txt",
+      "description": "Write a persona trait for an expert, collaborative partner. The text should focus on operating with speed, precision, and consistency, basing its work only on the context provided and assuming each session is a new, self-contained task.",
+      "output_path": "components/personas/precise_partner.txt"
+    },
+    {
+      "category": "personas",
+      "name": "meticulous_auditor.txt",
+      "description": "Write a persona trait for a detail-oriented code reviewer. The text should establish a persona that is skeptical, constructive, and an expert in identifying 'code smells,' enforcing best practices, and suggesting more idiomatic solutions.",
+      "output_path": "components/personas/meticulous_auditor.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "confidence_based_sync.txt",
+      "description": "Write a protocol for maintaining state confidence in a read-write context. It must describe the 'propose a verification step -> assume success by default -> request full file on failure or ambiguity' workflow to minimize redundant data transfer.",
+      "output_path": "components/protocols/confidence_based_sync.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "turn_by_turn_dialogue.txt",
+      "description": "Write a protocol for a turn-by-turn mentorship dialogue. It must describe the core loop: '1. Ask the user to perform a single, small action. 2. Wait for the user's response. 3. Analyze the provided clue and explain its significance. 4. Initiate a checkpoint to ensure understanding before proceeding.'",
+      "output_path": "components/protocols/turn_by_turn_dialogue.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "code_review_pass.txt",
+      "description": "Write a protocol for delivering a code review. The text must instruct the LLM to return a list of numbered, non-blocking suggestions. Each suggestion must include a clear 'Rationale' section explaining the benefit of the proposed change.",
+      "output_path": "components/protocols/code_review_pass.txt"
+    },
+    {
+      "category": "protocols",
+      "name": "connection_hopping.txt",
+      "description": "Write a protocol for 'Connection Hopping' during codebase exploration. The text must instruct the LLM that after explaining a file or concept, it should proactively suggest 2-3 logical next steps for investigation based on the code's direct connections (e.g., function calls, class imports, foreign keys).",
+      "output_path": "components/protocols/connection_hopping.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "preserve_functional_attributes.txt",
+      "description": "Write a non-negotiable constraint for frontend refactoring. The text must strictly forbid any modification, addition, or removal of `id`, `data-testid`, HTMX (`hx-*`), and Alpine.js (`x-*`, `@*`, `:*`) attributes to ensure tests and functionality are preserved.",
+      "output_path": "components/constraints/preserve_functional_attributes.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_html_restructure.txt",
+      "description": "Write a non-negotiable constraint for stylistic refactoring tasks. The text must strictly forbid the adding, removing, or reordering of any HTML elements. The only permitted change is the modification of `class` attributes.",
+      "output_path": "components/constraints/no_html_restructure.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "no_backend_changes.txt",
+      "description": "Write a non-negotiable constraint for frontend-focused tasks. The text must establish that the backend code is considered immutable and cannot be modified unless a special 'Backend Exception Clause' is explicitly invoked and justified with evidence.",
+      "output_path": "components/constraints/no_backend_changes.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "output_raw_code_only.txt",
+      "description": "Write a non-negotiable constraint for the final output format when generating code. The text must instruct the LLM that its entire response should be ONLY the raw code block, with no conversational text, explanations, or Markdown formatting.",
+      "output_path": "components/constraints/output_raw_code_only.txt"
+    },
+    {
+      "category": "constraints",
+      "name": "principle_of_completeness.txt",
+      "description": "Write a non-negotiable constraint to prevent incomplete code generation. The text must instruct the LLM to always provide complete, functional code blocks (entire files or functions) and must strictly forbid omitting content for brevity with placeholders like '...'.",
+      "output_path": "components/constraints/principle_of_completeness.txt"
+    }
+  ]
+}

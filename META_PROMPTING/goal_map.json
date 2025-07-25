@@ -1,0 +1,99 @@
+{
+  "Technical & Execution": {
+    "TEACH_OR_EXPLAIN": {
+      "description": "To teach a concept or document something.",
+      "persona": "empathetic_guide.txt",
+      "protocol": "connection_hopping.txt",
+      "constraints": [
+        "require_clarifying_analogies.txt"
+      ]
+    },
+    "DIAGNOSE_ROOT_CAUSE": {
+      "description": "To find the underlying cause of a problem.",
+      "persona": "digital_detective.txt",
+      "protocol": "root_cause_analysis_drilldown.txt",
+      "constraints": [
+        "principle_of_completeness.txt"
+      ]
+    },
+    "REVIEW_AGAINST_STANDARDS": {
+      "description": "To evaluate a piece of work against a set of rules.",
+      "persona": "meticulous_auditor.txt",
+      "protocol": "code_review_pass.txt",
+      "constraints": [
+        "reference_official_docs.txt",
+        "no_magic_values.txt"
+      ]
+    },
+    "SCAFFOLD_FROM_SCRATCH": {
+      "description": "To create a new entity based on a template or structure.",
+      "persona": "boilerplate_architect.txt",
+      "protocol": "scaffolding_confirmation_loop.txt",
+      "constraints": [
+        "no_placeholder_logic.txt",
+        "principle_of_completeness.txt"
+      ]
+    },
+    "OPTIMIZE_OR_REFINE": {
+      "description": "To improve an existing piece of work for clarity or efficiency.",
+      "persona": "performance_tuner.txt",
+      "protocol": "performance_hypothesis_test.txt",
+      "constraints": [
+        "preserve_public_api.txt"
+      ]
+    },
+    "ADD_OR_INTEGRATE": {
+      "description": "To add a new component to an existing system.",
+      "persona": "api_integration_specialist.txt",
+      "protocol": "feature_implementation_plan.txt",
+      "constraints": [
+        "idempotent_operations.txt",
+        "data_loss_warning.txt"
+      ]
+    },
+    "CONVERT_OR_MIGRATE": {
+      "description": "To change a piece of work from one format to another.",
+      "persona": "framework_migration_guide.txt",
+      "protocol": "file_by_file_translation.txt",
+      "constraints": [
+        "preserve_test_logic.txt"
+      ]
+    }
+  },
+  "Strategic & Developmental": {
+    "DECONSTRUCT_AN_IDEA": {
+      "description": "Explore a new concept to test its viability and principles.",
+      "persona": "socratic_inquisitor.txt",
+      "protocol": "first_principles_deconstruction.txt",
+      "constraints": [
+        "challenge_underlying_assumptions.txt",
+        "no_direct_answers_socratic_mode.txt"
+      ]
+    },
+    "PLAN_PROFESSIONAL_GROWTH": {
+      "description": "Set long-term career goals or refine your professional brand.",
+      "persona": "career_sherpa.txt",
+      "protocol": "goal_setting_with_okrs.txt",
+      "constraints": [
+        "long_term_horizon_only.txt"
+      ]
+    },
+    "BUILD_A_MENTAL_MODEL": {
+      "description": "Develop a deep, lasting understanding of a complex topic.",
+      "persona": "mental_model_master.txt",
+      "protocol": "learning_curriculum_builder.txt",
+      "constraints": [
+        "cite_thinkers_and_sources.txt",
+        "focus_on_principles_not_code.txt"
+      ]
+    },
+    "REFINE_A_PRESENTATION": {
+      "description": "Improve the clarity and impact of a key message.",
+      "persona": "clarity_communicator.txt",
+      "protocol": "presentation_dry_run.txt",
+      "constraints": [
+        "focus_on_principles_not_code.txt"
+      ]
+    }
+  }
+}
