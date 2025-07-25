@@ -4,84 +4,67 @@
 
 ---
 
-### **1. The Core Mission & Guiding Principles**
+### **1. The Core Mission: The "Prime Directive" is Now Codified**
 
-- **The "Why":** Our objective is to build the **`Orchestration Engine`**, a Python script that acts as a force multiplier for initiating expert-level LLM collaborations. It is a personalized power tool designed to solve the "Don't Repeat Yourself" (DRY) problem for prompt engineering.
+The single most important accomplishment of this session was to move beyond abstract goals and codify the project's precise definition of success. The entire project philosophy is now explicitly documented in the new **`docs/DESIGN_PHILOSOPHY.md`** file.
 
-- **The Prime Directive (The Target Audience is ME):** This is the most important design principle. The system is an in-house tool for an expert user (you). This means we will always prioritize a streamlined, powerful workflow over the complexities of a public-facing, foolproof product. The user is trusted to be the final quality gate.
+- **The "Why" is Clear:** Our mission is to solve the "8-Hour-to-1-Hour" problem. The framework is a success if, and only if, it can take a process that used to require a full day of manual effort and reduce it to ~1 hour of focused, high-value fine-tuning.
 
-- **Key Architectural Principles (Settled Decisions):**
-  1.  **External Brain:** The engine's core logic will be driven by an external **`goal_map.json`** file, allowing for easy configuration.
-  2.  **Frictionless JIT Naming:** Just-in-Time generated components will use an automatic naming convention (`autogen_{type}_for_{goal}.txt`) to eliminate user friction.
-  3.  **Resilient "Degraded Mode":** On LLM API failure (e.g., missing key, network error), the script will **not crash**. It will inform the user, log a TODO, and insert a placeholder, ensuring the workflow is never fully blocked.
-  4.  **Simple Assembly:** Final `.md` files will be assembled using simple string concatenation. Complex templating engines are not needed.
+- **The "Who" is Defined:** We are building this for the **"Artisan Engineer"**—a user who values their craft and wants a powerful tool to accelerate the 80% of scaffolding work, freeing them to apply their expertise to the final 20% of artisanal polish.
+
+This Prime Directive is now the constitution against which all future development work will be measured.
 
 ---
 
 ### **2. Accomplishments in This Session (What's Done)**
 
-We have successfully completed the high-level architectural design phase and made critical decisions that provide a clear blueprint for development.
+We have successfully completed the full strategic and architectural design phase. The blueprint is now stable, comprehensive, and ready for implementation.
 
-1.  **SOLIDIFIED THE ARCHITECTURE:** We have a complete, documented architectural plan incorporating the principles above.
-2.  **GENERATED CORE CONFIGURATION:** The **`goal_map.json`** file has been designed and generated.
-3.  **UPDATED THE STRATEGIC PLAN:** The **`docs/STRATEGIC_PLAN.md`** has been updated to be a precise blueprint reflecting our final architectural decisions.
-4.  **IDENTIFIED THE NEXT CRITICAL RISK:** Through our Q&A, we successfully pinpointed the most complex and high-stakes part of the system: the **Just-in-Time (JIT) Component Generation Workflow**. We correctly decided to pause and model this workflow before writing any code.
+1.  **FINALIZED THE GOAL ARCHITECTURE:** We evolved the `goal_map.json` from a simple list into a sophisticated, two-tiered structure that correctly balances the framework's dual purpose:
+
+    - **`Technical & Execution`** goals for task-oriented work.
+    - **`Strategic & Developmental`** goals for planning and ideation.
+      The final, populated `goal_map.json` file is complete and saved.
+
+2.  **PERFORMED A FULL "DOCUMENTATION INTEGRITY" PASS:** We systematically reviewed the entire project to ensure all documents are consistent with our finalized design.
+
+    - **Created:** `docs/DESIGN_PHILOSOPHY.md`
+    - **Updated:** `docs/STRATEGIC_PLAN.md` (to reflect the new wizard UI and JIT logic)
+    - **Updated:** `docs/SIMULATION_BRIEFING.md` (with a superior intro and a reusable template structure)
+    - **Updated:** `README.md` (with the correct roadmap and usage example)
+    - **Updated:** `WHITE_PAPER.md` (with the correct workflow example)
+
+3.  **ESTABLISHED THE "PROJECT CHARTER" CONCEPT:** We identified the value of the layman's summary ("Robotic Kitchen Assistant") and integrated it into the `SIMULATION_BRIEFING.md` to be used as a high-efficiency context capsule for any future external analysis.
+
+4.  **DEFINED THE SIMULATION ARCHIVING PROTOCOL:** We established a clean workflow where completed simulation results are archived to a `LEGACY` folder, ensuring the active context remains pure and focused on the project's current state.
 
 ---
 
-### **3. The Next Critical Task: Simulate and Solve the JIT Workflow**
+### **3. The Next Critical Task: Build the `orchestrator.py` Engine**
 
 **This is our immediate and only priority for the next session.**
 
-Before we write the first line of `orchestrator.py`, we must architect a robust policy for the JIT workflow. We will do this by simulating the **"Missing Protocol" Scenario** and designing definitive solutions to the critical questions it revealed.
+All prerequisite design, philosophy, and architectural questions have been answered. The blueprint is complete. The next step is to translate that blueprint into functional code.
 
-**Our To-Do List (The Questions We Must Answer):**
+**Definition of "Done" for Next Session:**
+We will have a working version of the `orchestrator.py` script that successfully implements the end-to-end workflow as defined in `docs/STRATEGIC_PLAN.md`. This includes:
 
-- **[TODO] Design the State Management Policy:**
-
-  - **Question:** When and how do we safely update `goal_map.json` after a component is auto-generated to prevent an inconsistent state (e.g., an orphaned component)?
-  - **Goal:** Define a transaction-like process for the "create file -> update map" operation.
-
-- **[TODO] Design the Naming & Concept Contract:**
-
-  - **Question:** How do we resolve the logical disconnect where a component is conceptually one thing (e.g., `root_cause_analysis_drilldown`) but is saved under a different, auto-generated name?
-  - **Goal:** Design a naming and mapping strategy that keeps the component library intuitive and the `goal_map.json` easy to understand over time.
-
-- **[TODO] Design the Idempotency Strategy:**
-  - **Question:** How do we ensure that running the JIT process for the same missing component multiple times doesn't pollute the library with duplicates (e.g., `autogen_protocol_1.txt`, `autogen_protocol_2.txt`)?
-  - **Goal:** Define a clear flowchart or set of rules that makes the generation process idempotent.
-
-**Definition of "Done" for Next Session:** We will have successfully completed this task when we have a clear, written-down **policy** that answers the three questions above. The output will be a set of rules and pseudo-code, not Python code.
+- Reading the nested `goal_map.json` file.
+- Displaying the new, two-tiered, descriptive menu to the user.
+- Handling user input to select a goal.
+- Assembling the final `00_PERSONA.md` and `01_PROMPT_TEMPLATE.md` from the correct components.
+- Implementing the "self-healing" JIT generation logic if a component is missing.
+- Saving the final files to the correct output directory.
 
 ---
 
 ### **4. Long-Term Roadmap**
 
-1.  **[Current]** Simulate and design the JIT workflow policy.
-2.  **[Next]** Write the `orchestrator.py` script based on our complete architectural blueprint.
-3.  **[Future]** Test the end-to-end functionality of the `orchestrator.py` engine.
+1.  **[Done]** Strategic Planning
+2.  **[Done]** System Architecture & Design
+3.  **[Current]** **Build the Orchestrator**
+4.  **[Next]** Component Generation & Testing
 
 ---
 
-### **Addendum: The `SIMULATION_BRIEFING.md` Protocol for External Analysis**
-
-During our discussion, we identified a critical gap in our development process: the need to efficiently and accurately brief a context-free, external LLM for simulation and analysis tasks. We concluded that internal blueprints like `STRATEGIC_PLAN.md` are insufficient for this purpose as they assume a deep, shared project context.
-
-To solve this, we have created a new, dedicated strategic document: **`docs/SIMULATION_BRIEFING.md`**.
-
-**Purpose and Function:**
-This document serves as a **portable, high-density context capsule**. Its sole purpose is to onboard an external LLM, providing it with all the necessary background to perform a relevant and high-quality simulation of a specific project scenario. It is the official and required tool for any such analysis.
-
-**Standardized Structure:**
-The briefing document is organized into four distinct sections to ensure a rapid and logical transfer of context:
-
-1.  **The Core Mission & The Factory Analogy:** A high-level executive summary of the project's purpose (The "Why").
-2.  **The System Components (The "Cast of Characters"):** A concise glossary defining the role of each key file and directory (`orchestrator.py`, `goal_map.json`, `components/`, etc.).
-3.  **The End-to-End Workflow (The "Plot"):** A summary of the system's successful, standard operational flow.
-4.  **The Current Simulation Task (The "Assignment"):** The dynamic section of the document. This part is to be updated for each specific simulation, clearly defining the initial state, the scenario to be modeled, and the critical questions the LLM must address.
-
-This protocol ensures that our simulations are not only efficient but also consistent and grounded in a shared, accurate understanding of the project's architecture and goals.
-
----
-
-**IMPORTANT:** When we resume, your first prompt should be to confirm that you have reviewed this handover and are ready to begin designing the JIT workflow policy. Always ask if any part of this document seems contradictory or unclear.
+**IMPORTANT:** When we resume, your first prompt should be to confirm that you have reviewed this handover and are ready to begin the implementation of `orchestrator.py`.

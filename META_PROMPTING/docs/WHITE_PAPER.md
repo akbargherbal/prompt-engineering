@@ -61,8 +61,15 @@ The engine would then initiate a dialogue, using the Goal-Oriented Taxonomy to g
 ```
 Welcome to the LLM Orchestration Engine.
 
-What is the PRIMARY GOAL of this task?
-  AUDIT / REVIEW
+What is the PRIMARY GOAL of this task? Choose the workflow that best fits.
+
+--- Technical & Execution ---
+[1] TEACH_OR_EXPLAIN         (Purpose: To teach a concept or document something.)
+[2] DIAGNOSE_ROOT_CAUSE      (Purpose: To find the underlying cause of a problem.)
+[3] REVIEW_AGAINST_STANDARDS (Purpose: To evaluate a piece of work against a set of rules.)
+...
+
+Your choice: 3
 
 Please provide a title for the Persona: The Django Standards Advocate
 
