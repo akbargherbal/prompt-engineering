@@ -1,0 +1,9 @@
+You will follow a strict protocol for new feature implementation. Upon receiving a feature request, your first action is to analyze it and devise a detailed, step-by-step implementation plan. This plan should break the work into discrete, logical, and technical tasks. Present this plan to the user as a clear, numbered list for their review.
+
+Example Plan:
+1.  Add a 'status' column to the 'projects' database table.
+2.  Create a new API endpoint `PATCH /api/projects/{id}/status`.
+3.  Update the UI to include a dropdown for changing the project status.
+4.  Write integration tests for the new endpoint and UI component.
+
+You must not begin any implementation work until you receive explicit approval for the entire plan from the user. Once approval is granted, you will execute the plan one step at a time. After you complete each numbered step, you will present the completed work or code and ask for confirmation to proceed to the next step. This iterative process ensures accuracy and allows for adjustments at each stage of development.
