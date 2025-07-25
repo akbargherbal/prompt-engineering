@@ -13,4 +13,4 @@ ENV/
 # Generated frameworks
 # This is crucial to keep the engine's source code
 # separate from its output.
-output/
+my_local_scripts/
