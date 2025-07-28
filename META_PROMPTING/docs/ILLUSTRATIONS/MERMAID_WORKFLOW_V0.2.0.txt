@@ -1,0 +1,36 @@
+---
+config:
+  theme: forest
+---
+flowchart TD
+    subgraph "Phase 1: User Configuration"
+        A["Artisan Engineer (User)"] -- Creates --> B{project.yaml};
+    end
+
+    subgraph "Phase 2: Execution & Orchestration"
+        C[orchestrator.py --config project.yaml]
+        B -- Input to --> C;
+    end
+
+    subgraph "Phase 3: Component Assembly (The 'What')"
+        D{goal_map.v2.json};
+        E[Component Library: <br/>- personas/*.txt <br/>- protocols/*.txt <br/>- constraints/*.txt];
+        C -- Reads configuration from --> D;
+        D -- Defines which components to use --> F((Assemble <br/>Component Array));
+        E -- Provides raw text snippets --> F;
+    end
+
+    subgraph "Phase 4: LLM Synthesis (The 'How')"
+        G([LLM API]);
+        F -- Sends array of components <br/> and user additions from project.yaml --> G;
+        G -- Rewrites and synthesizes into a <br/> cohesive, narrative-driven draft --> H((Synthesized <br/>Framework));
+    end
+
+    subgraph "Phase 5: Final Output (The '80% Solution')"
+        I["00_PERSONA.md <br/> (Cohesive & Context-Aware)"];
+        J["01_PROMPT_TEMPLATE.md <br/> (Structured & Bespoke)"];
+        H -- Generates --> I;
+        H -- Generates --> J;
+    end
+
+    A --> C;

@@ -1,3 +1,5 @@
+**IMPORTANT: LEGACY (PRE-v1.0) & OUT-OF-DATE SIMULATION BRIEFINGS — IGNORE UNTIL FURTHER NOTICE**
+
 # META_PROMPTING: Simulation & Analysis Briefing
 
 **DOCUMENT PURPOSE:** This document is a comprehensive, self-contained briefing for a Large Language Model tasked with running a simulation related to the META_PROMPTING project. Its goal is to establish the necessary context for a high-quality, relevant analysis in a minimal amount of time.
