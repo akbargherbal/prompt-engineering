@@ -98,7 +98,7 @@ END_OF_APPENDIX_C
 
 ---
 
-START_OF_APPENDIX_E
+START_OF_APPENDIX_D
 
 ### **Appendix E: (Brainstorming Session with an LLM)**
 
@@ -322,8 +322,6 @@ _The idea: Separate the creation of the foundational "OS" (Persona) from the cre
     - How does the "Prompt Template Builder" know about the Persona's specific principles and protocols? Does the Master Promptsmith have to "re-read" the final Persona file to gain the necessary context to help me build a compatible prompt?
     - Could this lead to more powerful specialization? Could we have different "Master Promptsmiths"—one that is an expert at forging Personas, and another that is an expert at crafting effective Prompt Templates?
 
----
-
-END_OF_APPENDIX_E
+END_OF_APPENDIX_D
 
 ---
