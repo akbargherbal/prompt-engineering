@@ -1,0 +1,343 @@
+[
+  {
+    "categoryName": "Primary User Actions",
+    "features": [
+      {
+        "featureName": "Send Chat Message",
+        "trigger": "User clicks the \"Send message\" button (up-arrow icon).",
+        "behavior": "The text content from the message input area is submitted to the selected Gemini model for processing. The user's message appears in the chat history.",
+        "feedback": "The button has a hover effect, changing its background color. The user message bubble is added to the chat interface.",
+        "context": "Available in the main chat view when the message input area is present."
+      },
+      {
+        "featureName": "Open Settings Sidebar",
+        "trigger": "User clicks the persistent Gear icon in the top-right corner.",
+        "behavior": "If Zen Mode is off, the right settings sidebar slides into view. If Zen Mode is on, it is first disabled, and then the right sidebar slides into view.",
+        "feedback": "The right sidebar slides in from the right. An overlay darkens the main content area.",
+        "context": "The Gear icon is always visible in the top-right corner of the application."
+      },
+      {
+        "featureName": "Close Settings Sidebar",
+        "trigger": "User clicks the \"X\" (Close settings) button inside the right sidebar.",
+        "behavior": "The right sidebar slides out of view.",
+        "feedback": "The sidebar slides to the right and disappears. The overlay fades out.",
+        "context": "Available only when the right settings sidebar is open."
+      },
+      {
+        "featureName": "Close Sidebars via Overlay",
+        "trigger": "User clicks the dark, semi-transparent overlay.",
+        "behavior": "Both the left and right sidebars are closed.",
+        "feedback": "The active sidebar slides out of view, and the overlay fades away.",
+        "context": "Occurs whenever either the right sidebar is open, or the left sidebar is open on a screen smaller than 1024px."
+      },
+      {
+        "featureName": "Toggle Zen Mode",
+        "trigger": "User clicks the toggle switch next to the \"Zen Mode\" label in the settings sidebar.",
+        "behavior": "Toggles the minimalist \"Zen Mode\". When enabled, the left sidebar and header disappear, and the main chat view expands to fill the screen. The right sidebar is automatically closed if it was open.",
+        "feedback": "The toggle switch animates, changing color and moving the circle handle. The header and left sidebar fade and slide out of view. The chat input area gains rounded top corners.",
+        "context": "Available in the settings sidebar."
+      },
+      {
+        "featureName": "Select Chat Model (Gemini Pro)",
+        "trigger": "User clicks the \"Gemini Pro\" radio button or its label in the settings sidebar.",
+        "behavior": "Sets \"Gemini Pro\" as the active model. The application's theme changes to the \"Pro\" theme (indigo accents). The header icon and text update to reflect the selection.",
+        "feedback": "The radio button becomes selected. The header icon changes to a diamond (💎). The header text, message bubbles, and UI accents change to indigo.",
+        "context": "Available in the settings sidebar."
+      },
+      {
+        "featureName": "Select Chat Model (Gemini Flash)",
+        "trigger": "User clicks the \"Gemini Flash\" radio button or its label in the settings sidebar.",
+        "behavior": "Sets \"Gemini Flash\" as the active model. The application's theme changes to the \"Flash\" theme (cyan accents). The header icon and text update to reflect the selection.",
+        "feedback": "The radio button becomes selected. The header icon changes to a lightning bolt (⚡️). The header text, AI message bubble border, and UI accents change to cyan. The chat background becomes a gradient.",
+        "context": "Available in the settings sidebar."
+      },
+      {
+        "featureName": "Open Left Sidebar (Mobile/Tablet)",
+        "trigger": "User clicks the hamburger icon in the main header.",
+        "behavior": "The left sidebar slides into view from the left.",
+        "feedback": "The left sidebar slides in. A dark overlay appears over the main content.",
+        "context": "This hamburger icon is only visible on screen widths less than 1024px and when not in Zen Mode."
+      },
+      {
+        "featureName": "Start New Chat",
+        "trigger": "User clicks the \"New Chat\" button in the left sidebar.",
+        "behavior": "Clears the current conversation and starts a fresh chat session.",
+        "feedback": "The chat area would clear, presenting a blank slate.",
+        "context": "Available in the left sidebar."
+      },
+      {
+        "featureName": "Logout",
+        "trigger": "User clicks the \"Logout\" button in the left sidebar.",
+        "behavior": "Logs the user out of the application.",
+        "feedback": "The user would likely be redirected to a login screen.",
+        "context": "Available in the left sidebar."
+      }
+    ]
+  },
+  {
+    "categoryName": "Keyboard Shortcuts",
+    "features": [
+      {
+        "featureName": "Standard Text Input",
+        "trigger": "User types on their keyboard.",
+        "behavior": "Enters text into the focused element, typically the message `<textarea>`.",
+        "feedback": "Text appears in the input field.",
+        "context": "When the message input area is focused."
+      },
+      {
+        "featureName": "Submit with Enter",
+        "trigger": "User presses the \"Enter\" key in the message input area.",
+        "behavior": "(Assumed standard behavior) Submits the chat message.",
+        "feedback": "The message is sent.",
+        "context": "When the message input area is focused."
+      },
+      {
+        "featureName": "New Line in Input",
+        "trigger": "User presses \"Shift+Enter\" in the message input area.",
+        "behavior": "(Assumed standard behavior) Inserts a new line in the text area instead of submitting the message.",
+        "feedback": "The cursor moves to a new line within the textarea.",
+        "context": "When the message input area is focused."
+      }
+    ]
+  },
+  {
+    "categoryName": "Navigation Behaviors",
+    "features": [
+      {
+        "featureName": "Sidebar Navigation",
+        "trigger": "Clicking \"New Chat\" or \"Logout\".",
+        "behavior": "\"New Chat\" resets the main view; \"Logout\" navigates the user out of the main application interface.",
+        "feedback": "The main chat view updates.",
+        "context": "Inside the left sidebar."
+      }
+    ]
+  },
+  {
+    "categoryName": "State Changes",
+    "features": [
+      {
+        "featureName": "Model Selection State",
+        "trigger": "Clicking a model's radio button.",
+        "behavior": "The `selectedModel` state changes to 'pro' or 'flash'. This change is persistent for the current session and dictates which `activeTheme` is used.",
+        "feedback": "UI colors and icons change immediately across the application.",
+        "context": "In the settings sidebar."
+      },
+      {
+        "featureName": "Zen Mode State",
+        "trigger": "Clicking the Zen Mode toggle.",
+        "behavior": "The `zenMode` boolean state is flipped. This state change dictates the visibility of the header and left sidebar.",
+        "feedback": "UI elements appear or disappear with a transition.",
+        "context": "In the settings sidebar."
+      },
+      {
+        "featureName": "Left Sidebar State",
+        "trigger": "Clicking the hamburger icon or window resize.",
+        "behavior": "The `leftSidebarOpen` boolean state is flipped, controlling its visibility.",
+        "feedback": "The sidebar slides in or out.",
+        "context": "On screens less than 1024px wide, or automatically on wider screens."
+      },
+      {
+        "featureName": "Right Sidebar State",
+        "trigger": "Clicking the gear icon or the close button.",
+        "behavior": "The `rightSidebarOpen` boolean state is flipped, controlling its visibility.",
+        "feedback": "The sidebar slides in or out.",
+        "context": "App-wide."
+      }
+    ]
+  },
+  {
+    "categoryName": "Visual Feedback",
+    "features": [
+      {
+        "featureName": "Hover Effects",
+        "trigger": "User hovers the mouse over interactive elements.",
+        "behavior": "The background color of buttons (\"Logout\", \"Send message\", Gear icon) changes.",
+        "feedback": "A subtle color shift indicates the element is interactive.",
+        "context": "On all clickable/tappable elements."
+      },
+      {
+        "featureName": "Focus Ring",
+        "trigger": "User navigates to the message input area using the keyboard (Tab key) or clicks on it.",
+        "behavior": "A colored ring appears around the text area.",
+        "feedback": "A 2px ring appears. The color of the ring is determined by the active theme (indigo for Pro, cyan for Flash).",
+        "context": "When the message input `textarea` is focused."
+      },
+      {
+        "featureName": "Sidebar Transitions",
+        "trigger": "Opening or closing any sidebar.",
+        "behavior": "The sidebars smoothly slide in and out of view.",
+        "feedback": "A 0.3-second ease-in-out transition is applied to the `transform` property.",
+        "context": "App-wide."
+      },
+      {
+        "featureName": "Zen Mode Transition",
+        "trigger": "Toggling Zen Mode.",
+        "behavior": "The header and other UI elements fade out or in.",
+        "feedback": "A smooth transition hides or shows the main UI chrome.",
+        "context": "When the Zen Mode toggle is used."
+      }
+    ]
+  },
+  {
+    "categoryName": "Responsive Behaviors",
+    "features": [
+      {
+        "featureName": "Persistent Left Sidebar (Desktop)",
+        "trigger": "Viewing the application on a screen wider than 1024px.",
+        "behavior": "The left sidebar is displayed by default as a static part of the layout and does not overlay the content. The hamburger icon is hidden.",
+        "feedback": "The layout adjusts to a three-column view (Sidebar, Main, empty space where right sidebar can appear).",
+        "context": "When `window.innerWidth > 1024`."
+      },
+      {
+        "featureName": "Collapsible Left Sidebar (Mobile/Tablet)",
+        "trigger": "Viewing the application on a screen narrower than 1024px.",
+        "behavior": "The left sidebar is hidden by default and can be toggled open with a hamburger icon. When open, it overlays the main content.",
+        "feedback": "The hamburger icon is visible in the header.",
+        "context": "When `window.innerWidth < 1024`."
+      },
+      {
+        "featureName": "Automatic Sidebar Re-opening",
+        "trigger": "User resizes the browser window from below 1024px to above 1024px.",
+        "behavior": "The `leftSidebarOpen` state is automatically set to `true`, making the sidebar visible as a static panel.",
+        "feedback": "The left sidebar appears without user interaction.",
+        "context": "On window resize."
+      }
+    ]
+  },
+  {
+    "categoryName": "Auto-behaviors",
+    "features": [
+      {
+        "featureName": "Dynamic Textarea Resizing",
+        "trigger": "User types text into the message input area, causing the content to exceed the visible height.",
+        "behavior": "The `textarea` automatically increases its height to fit the content, up to a maximum height of 48 pixels (`max-h-48`).",
+        "feedback": "The input area grows vertically as the user types.",
+        "context": "In the message input footer."
+      },
+      {
+        "featureName": "Active Theme Calculation",
+        "trigger": "The `selectedModel` state changes.",
+        "behavior": "A computed property (`activeTheme`) automatically returns the correct theme object (`proTheme` or `flashTheme`). All UI elements bound to this property update instantly.",
+        "feedback": "The entire app's color scheme changes.",
+        "context": "This is an internal state management behavior."
+      }
+    ]
+  },
+  {
+    "categoryName": "Edge Case Interactions",
+    "features": [
+      {
+        "featureName": "Settings in Zen Mode",
+        "trigger": "User clicks the Gear icon while Zen Mode is active.",
+        "behavior": "The application first exits Zen Mode, revealing the main UI chrome, and then opens the right settings sidebar.",
+        "feedback": "The header and sidebars reappear, and then the right sidebar slides into view.",
+        "context": "Only when Zen Mode is enabled."
+      }
+    ]
+  },
+  {
+    "categoryName": "Accessibility Features",
+    "features": [
+      {
+        "featureName": "Element Titles",
+        "trigger": "User hovers over an icon-only button.",
+        "behavior": "The browser displays a native tooltip with a description of the button's function.",
+        "feedback": "A small text box appears (e.g., \"Toggle Settings\", \"Open sidebar\", \"Close settings\", \"Send message\").",
+        "context": "On the gear, hamburger, close, and send buttons."
+      },
+      {
+        "featureName": "Form Labels",
+        "trigger": "A screen reader encounters the Zen mode toggle or model selection.",
+        "behavior": "The `label` element correctly describes the associated input control (\"Zen Mode\", \"Gemini Pro\", \"Gemini Flash\").",
+        "feedback": "(Audio) A screen reader will announce the label for the control.",
+        "context": "In the settings sidebar."
+      }
+    ]
+  },
+  {
+    "categoryName": "Error States",
+    "features": [
+      {
+        "featureName": "Undefined Error States",
+        "trigger": "N/A (Not defined in mockup)",
+        "behavior": "Based on the app summary, potential error states would include 'Invalid API Key,' 'API Rate Limit Exceeded,' or 'Network Connection Error.' These are not visually represented in the static mockup.",
+        "feedback": "N/A",
+        "context": "These would appear when an API call fails or a system-level issue occurs."
+      }
+    ]
+  },
+  {
+    "categoryName": "Loading States",
+    "features": [
+      {
+        "featureName": "Undefined Loading States",
+        "trigger": "N/A (Not defined in mockup)",
+        "behavior": "A likely loading state would be a visual indicator that appears after a message is sent while the application is awaiting a response from the Gemini API.",
+        "feedback": "Could involve disabling the send button or showing a loading animation in the AI's message bubble.",
+        "context": "This state would be active between sending a prompt and receiving a response."
+      }
+    ]
+  },
+  {
+    "categoryName": "Contextual Features",
+    "features": [
+      {
+        "featureName": "Contextual Hamburger Icon",
+        "trigger": "Screen width.",
+        "behavior": "The hamburger icon in the header is only present on screens narrower than 1024px.",
+        "feedback": "The icon is visible or hidden.",
+        "context": "In the main header."
+      },
+      {
+        "featureName": "Contextual Overlay",
+        "trigger": "Sidebar state.",
+        "behavior": "The dark overlay is only shown when a sidebar is open in a way that it covers the main content (right sidebar is always an overlay, left sidebar is an overlay on screens < 1024px).",
+        "feedback": "The overlay appears and disappears.",
+        "context": "App-wide."
+      }
+    ]
+  },
+  {
+    "categoryName": "Persistence Behaviors",
+    "features": [
+      {
+        "featureName": "Conversation History",
+        "trigger": "User reloads the page or returns to the application.",
+        "behavior": "(Implied by `app_summary.md`'s \"persistent history of all your conversations\") The chat history from previous sessions would be loaded and displayed in the main chat area.",
+        "feedback": "Previous messages are visible upon loading the app.",
+        "context": "This is an assumed feature based on the summary, not demonstrable in the static mockup."
+      }
+    ]
+  },
+  {
+    "categoryName": "Integration Points",
+    "features": [
+      {
+        "featureName": "Google AI API Integration",
+        "trigger": "Sending a message.",
+        "behavior": "The application sends a request containing the user's prompt and conversation history to the Google AI API using the user's provided API key.",
+        "feedback": "An AI-generated response appears in the chat.",
+        "context": "This is the core backend integration described in the `app_summary.md`."
+      },
+      {
+        "featureName": "Developer API",
+        "trigger": "An external application makes a call to Gemini Fusion's API.",
+        "behavior": "(As described in `app_summary.md`) Allows external tools to programmatically interact with the application's chat capabilities.",
+        "feedback": "N/A (API response).",
+        "context": "A future/developer-focused feature."
+      }
+    ]
+  },
+  {
+    "categoryName": "Hidden Features",
+    "features": [
+      {
+        "featureName": "Right Sidebar for Extensibility",
+        "trigger": "N/A (Architectural feature).",
+        "behavior": "The right sidebar is designed not just for settings, but as a dedicated panel for future plugins and feature expansions, as mentioned in the `app_summary.md`.",
+        "feedback": "N/A.",
+        "context": "This is a foundational aspect of the app's design for future development."
+      }
+    ]
+  }
+]
