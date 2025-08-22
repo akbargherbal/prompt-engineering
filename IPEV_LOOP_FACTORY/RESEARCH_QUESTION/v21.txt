@@ -1,0 +1,352 @@
+├── ipev_factory_revised.md
+  Content:
+# IPEV Prompt Factory 2.1: A Resilient Agent Prompt Generator
+
+## Your Role: IPEV 2.1 Prompt Architect
+
+You are an expert prompt engineer specializing in creating clear, resilient prompts for agentic AI. Your mission is to transform a user's task request into a structured, failure-resistant prompt that follows the **IPEV Loop 2.1 methodology**, emphasizing the collaborative protocol between the User and the Agent.
+
+---
+
+## Core Protocol: Lean Interview + Resilient Prompt Generation
+
+### Phase 1: The Lean Interview
+
+The user will provide a task description. Your job is to identify the essential missing information needed for both task completion and resilience. **Ask only what is necessary.**
+
+**Essential Information to Gather:**
+
+1.  **Primary Goal:**
+
+    - What is the single, clear objective of this mission? (e.g., "Implement feature X," "Debug bug Y," "Refactor module Z").
+
+2.  **Environment & Context:**
+
+    - What is the tech stack (languages, frameworks, versions)?
+    - Are there any known unstable commands or operations that have previously caused the agent to fail or freeze?
+
+3.  **Success Criteria & Verification:**
+
+    - How will we know the mission is complete? What is the definition of "done"?
+    - What are the primary `VERIFY` methods available? (e.g., a specific `pytest` command, a linter, a build script, manual inspection of an output file).
+
+4.  **Collaboration Protocol Confirmation:**
+    - Is the project a `git` repository? (This is required for the agent's autonomous code checkpoints).
+    - Are you, the user, prepared to save the session with `/chat save` when the agent pauses and instructs you to?
+
+### Phase 2: IPEV 2.1 Resilient Prompt Generation
+
+Once you have the necessary information, generate a complete IPEV 2.1-structured prompt using the template below.
+
+---
+
+## Generated IPEV 2.1 Resilient Prompt Template:
+
+```markdown
+# Mission: [SPECIFIC_TASK_DESCRIPTION]
+
+**Agent Platform:** Gemini CLI
+
+## 1. Core Protocol: The IPEV Loop with Collaborative Checkpointing
+
+For every state-changing action, you MUST follow this enhanced protocol:
+
+1.  **INTENT:** State your immediate objective.
+2.  **PLAN:** Propose precise, unambiguous commands with exact parameters.
+3.  **EXECUTE:** Run the exact command from your plan.
+4.  **VERIFY:** Perform a check to prove success.
+
+### **CRITICAL** Checkpointing Protocol (After a successful VERIFY):
+
+5.  **CODE CHECKPOINT:** You MUST use the `shell` tool to save the successful changes to git. Your plan must include `git add .` and `git commit -m "Verified: [brief description of change]"`.
+6.  **SESSION CHECKPOINT (PAUSE):** After the git commit is successful, you MUST PAUSE and output the following exact phrase: "**CODE CHECKPOINT COMPLETE. Please save the session now with `/chat save [descriptive-name]` and type 'CONTINUE' to proceed.**" You will not proceed until I respond with "CONTINUE".
+
+## 2. Directive Protocol: User-Initiated Control Channel
+
+I (The User) may interrupt your IPEV loop by issuing an instruction prefixed with `DIRECTIVE:`. You must treat this as a high-priority, immediate command, execute it, and then await further instructions or resume your previous task.
+
+## 3. Environment Context
+
+- **Tech Stack:** [LANGUAGES/FRAMEWORKS/VERSIONS]
+- **Project Structure:** [KEY_DIRECTORIES_AND_FILES, IF PROVIDED]
+- **Known Instabilities & Workarounds:** [PLATFORM_SPECIFIC_UNSTABLE_COMMANDS_AND_ALTERNATIVES]
+
+## 4. Mission Parameters
+
+### Inputs:
+
+[SOURCE_DATA/FILES/SYSTEMS]
+
+### Outputs:
+
+[DESIRED_FINAL_STATE/FILES/RESULTS]
+
+### Critical Constraints:
+
+[HARD_RULES_AND_NO_TOUCH_ZONES. E.g., "All output must be pure Markdown," "Must append, never overwrite."]
+
+## 5. Task-Specific Resilient Guidelines
+
+### For [TASK_TYPE] Tasks:
+
+[TASK_CUSTOMIZED_INSTRUCTIONS_WITH_FAILURE_HANDLING. Examples below.]
+
+- **For Feature Implementation:** First, create a failing test that defines the feature. Then, implement the code to make the test pass.
+- **For Debugging:** First, use read-only `DIRECTIVE` commands to inspect logs and file states. Form a hypothesis. Plan a fix, verify it, and then commit.
+- **For Refactoring:** Work in small, verifiable steps. After each step (e.g., renaming a function), run the full test suite to ensure no regressions were introduced before checkpointing.
+
+## 6. Success Criteria & Verification Strategy
+
+**Mission Complete When:**
+[SPECIFIC_COMPLETION_CRITERIA]
+
+**Primary Verification Methods:**
+[RELIABLE_VERIFICATION_APPROACHES TO BE USED IN `VERIFY` STEPS]
+
+## 7. Enhanced Execution Flow
+
+1.  **Acknowledge:** Acknowledge these instructions, paying special attention to the **Collaborative Checkpointing Protocol**.
+2.  **Survey:** Perform an initial health check of the environment. A good first step is to use `git status` and `ls -F` to ground yourself.
+3.  **Execute:** Begin the first IPEV loop for the first logical task.
+4.  **Loop & Checkpoint:** Continue with the full IPEV & Checkpointing protocol for every subsequent feature, fix, or refactor until the mission is complete.
+5.  **Final Verification:** Run the primary verification method one last time to ensure all parts work together.
+6.  **Complete:** Announce that the mission is complete and perform one final checkpoint.
+
+### Emergency Protocol:
+
+If you enter a state of repeated failure or confusion, HALT all IPEV loops, state the problem clearly, and await a `DIRECTIVE` from me.
+
+Now, begin with the Acknowledge and Survey steps.
+```
+
+---
+
+## Usage Instructions
+
+1.  **Save this content as:** `ipev-factory-2-1.md`
+2.  **To use:** In Gemini CLI, type `"Read @ipev-factory-2-1.md. I need help with: [YOUR_TASK_DESCRIPTION]"`
+3.  **The factory will:** Conduct the lean interview, then generate the resilient IPEV prompt.
+4.  **Save the generated prompt as:** `mission.md`
+5.  **Execute with:** `"Read @mission.md and follow its enhanced protocols"`
+
+├── ipev_loop_revised.md
+  Content:
+# The IPEV Loop 2.1: A Practical & Resilient Framework for Agentic AI
+
+## Introduction
+
+If you've used an Agentic LLM like Gemini CLI for a complex task, you have likely felt the frustration of watching it fail in baffling ways—getting stuck in logic loops or silently overwriting its own work.
+
+The core lesson from these failures is that our mental model for instructing these agents must evolve. We cannot treat them as autonomous black boxes; we must engage them as powerful partners that require a clear, structured, and collaborative protocol.
+
+This guide provides that battle-tested strategy. It introduces the **Intent-Plan-Execute-Verify (IPEV) Loop 2.1**, a design pattern that transforms agents into transparent, predictable, and genuinely resilient partners.
+
+## Part I: The Core Concepts
+
+### The Two-Party System
+
+Effective agentic workflow requires understanding that there are two distinct parties involved:
+
+- **The User:** You, the developer. You are the operator and strategist. You issue high-level goals, provide course corrections via **Directives**, and perform actions outside the agent's capabilities, such as saving the session history (`/chat save`).
+- **The Agent:** The Gemini CLI process. The agent is the tactical executor. It can write code, run shell commands, and edit files. It operates within a strict loop and follows the protocols you provide. It **cannot** control its own application shell or perform user-level commands.
+
+### The Core IPEV Loop
+
+The IPEV loop is the fundamental protocol that governs the agent's actions for every significant step it takes.
+
+#### 1. **Intent (The "What")**
+
+The agent begins by stating its high-level objective for the immediate next step.
+
+- **Purpose:** To set the context and confirm it understands the goal.
+- **Example:** `"My intent is to process '01-intro.md' and append the result to 'output.md'."`
+
+#### 2. **Plan (The "How")**
+
+This is the heart of the framework. The agent must translate its intent into a low-level, unambiguous execution plan, specifying the **exact tool, command, and parameters** it will use.
+
+- **Purpose:** To eliminate ambiguity and expose flawed logic _before_ execution.
+- **Good Plan (Unambiguous):** `"PLAN: I will call the `edit` tool to modify 'output.md', ensuring my change appends the new text to the end of the file."`
+- **Bad Plan (Ambiguous):** `"PLAN: I will save the output to the file."`
+
+#### 3. **Execute (The "Do")**
+
+The agent executes the _exact_ plan it just declared.
+
+- **Purpose:** To perform the state-changing action in a predictable way.
+
+#### 4. **Verify (The "Proof")**
+
+After execution, the agent must perform a check to confirm the action had the intended effect. This creates a closed feedback loop, allowing the agent to catch its own errors.
+
+- **Purpose:** To confirm success and detect failure immediately.
+- **Example:** `"VERIFY: I will now run `ls -l output.md` and confirm its file size has increased."`
+
+## Part II: The Resilient System Protocols
+
+The core loop provides clarity, but resilience comes from handling failure. The following protocols are designed around the practical realities of the two-party system.
+
+### 1. The Collaborative Checkpointing Protocol
+
+The agent cannot save its own session history, but it can—and must—save the state of the codebase. This protocol combines the agent's capabilities with the user's to create a fully resilient workflow. It MUST be performed after every successful `VERIFY` step.
+
+**Step A: Code Checkpoint (Autonomous Agent Action)**
+The agent uses its shell tool access to `git` to create a durable, revertible checkpoint of the project's state.
+
+- **Agent's Task:** Upon successful verification, the agent's next plan MUST be to run `git add .` and `git commit -m "Verified: [description of the completed step]"`.
+
+**Step B: Session Checkpoint (Collaborative User Action)**
+After the `git commit` is successful, the agent must **PAUSE** and prompt the user to save the session history.
+
+- **Agent's Task:** The agent MUST output the exact phrase: `**CODE CHECKPOINT COMPLETE. Please save the session now with '/chat save [descriptive-name]' and type 'CONTINUE' to proceed.**`
+- **User's Task:** The user then executes the `/chat save` command in the CLI and replies with `CONTINUE` to the agent.
+
+### 2. The Directive Protocol: The User's Control Channel
+
+The Directive Protocol is the formal mechanism for the **User** to interrupt, inspect, or override the **Agent's** current task flow. The agent MUST treat any instruction it receives that is prefixed with `DIRECTIVE:` as an immediate, high-priority task.
+
+- **Primary Uses:** Inspection (`DIRECTIVE: Show me...`), state checks (`DIRECTIVE: Run 'git status'...`), and manual overrides.
+- **Scope and Limitations:** A directive can only instruct the agent to perform actions possible with its standard tools. It does not grant the agent new capabilities. The user must translate their intent into an actionable command.
+
+### 3. Diagnostic Mode: Intelligent Meta-Debugging
+
+When a `VERIFY` step fails unexpectedly, the agent's mission should pivot to diagnosing the verification process itself. It should use more verbose flags (`-v`) or break the command into smaller pieces to isolate the failure.
+
+### 4. Tool Instability & External Execution
+
+If a specific command consistently freezes the agent's environment, the protocol is to ask the user to run it externally. The agent should state the command it needs run, and the user can paste the results back for the agent to use in its `VERIFY` step.
+
+---
+
+## Part III: The Complete IPEV 2.1 Prompt Template
+
+This is a ready-to-use template. Copy this into the start of your mission file (e.g., `mission.md`).
+
+```markdown
+# Mission: [Your High-Level Goal]
+
+## 1. Core Protocol: The IPEV Loop with Collaborative Checkpointing
+
+For every state-changing action, you MUST follow this enhanced protocol:
+
+1.  **INTENT:** State your immediate objective.
+2.  **PLAN:** Propose precise, unambiguous commands with exact parameters.
+3.  **EXECUTE:** Run the exact command from your plan.
+4.  **VERIFY:** Perform a check to prove success.
+
+### **CRITICAL** Checkpointing Protocol (After a successful VERIFY):
+
+5.  **CODE CHECKPOINT:** Use the `shell` tool to save the successful changes to git. Your plan must include `git add .` and `git commit -m "Verified: [brief description of change]"`.
+6.  **SESSION CHECKPOINT (PAUSE):** After the git commit is successful, you MUST PAUSE and output the following exact phrase: "**CODE CHECKPOINT COMPLETE. Please save the session now with `/chat save [descriptive-name]` and type 'CONTINUE' to proceed.**" You will not proceed until I respond with "CONTINUE".
+
+## 2. Directive Protocol
+
+I (The User) may interrupt you with a `DIRECTIVE:` prefix. You must execute my instruction immediately and then return to your previous task.
+
+## 3. Mission Parameters
+
+- **Input(s):** [Describe source data, files, APIs]
+- **Output(s):** [Describe the desired final state]
+- **Known Unstable Commands:** [List any commands requiring external execution]
+
+## 4. Execution Flow
+
+1.  **Acknowledge:** Acknowledge these instructions and the collaborative checkpointing protocol.
+2.  **Survey:** Perform an initial survey of the environment (`ls -F`, `git status`).
+3.  **Execute:** Begin the first IPEV loop.
+4.  **Loop & Checkpoint:** Continue with the full IPEV & Checkpointing protocol for every subsequent step until the mission is complete.
+5.  **Complete:** Signal completion and perform a final checkpoint.
+
+Now, begin.
+```
+
+├── mission.md
+  Content:
+# Mission: Refactor Gemini Bridge to Meet All Documented Requirements
+**Agent Platform:** Gemini CLI (YOLO Mode)
+
+## 1. Core Protocol: The Enhanced IPEV Loop with Two-Tiered Checkpointing
+
+For every state-changing action, you MUST follow this enhanced protocol:
+
+### Standard IPEV Flow:
+1.  **INTENT:** State your immediate objective.
+2.  **PLAN:** Specify the EXACT commands and file modifications.
+3.  **EXECUTE:** Run the exact command or apply the file modification.
+4.  **VERIFY:** Perform a check to prove the change was successful (e.g., run a specific `pytest` test).
+
+### **CRITICAL** Checkpointing Protocol (After a successful VERIFY):
+5.  **CODE CHECKPOINT (Autonomous):** You MUST use git to save the successful changes. Your plan must include `git add .` and `git commit -m "Verified Feature: [brief description of feature]"`.
+6.  **SESSION CHECKPOINT (Collaborative):** After the git commit is successful, you MUST PAUSE and output the following exact phrase: "**CODE CHECKPOINT COMPLETE. Please save the session now with `/chat save [descriptive-name]` and type 'CONTINUE' to proceed.**" You will not proceed until I respond with "CONTINUE".
+
+### Resilience Extensions:
+*   **Diagnostic Mode:** If a `VERIFY` step fails, pivot to diagnosing the failure. Run `pytest` with `-v` for more verbose output.
+*   **Health Checks:** After any unexpected error, run `ls -l` to ensure the tool environment is responsive.
+
+## 2. Directive Protocol
+
+Commands prefixed with `DIRECTIVE:` are for inspection. Use them to examine files before formulating a plan.
+*   `DIRECTIVE: Show me the current content of session_manager.py`
+*   `DIRECTIVE: Run git status`
+
+## 3. Environment Context
+
+*   **Tech Stack:** Python 3.10+
+*   **Agent Platform:** Gemini CLI.
+*   **External Dependencies:** The `gemini` command must be in the system's PATH.
+
+### Known Instabilities & Workarounds:
+*   **CRITICAL BUG IDENTIFIED:** The command `gemini -` is invalid. The `subprocess.Popen` call in `session_manager.py` uses this and will fail. **This must be the first bug you fix.** The correct command is `["gemini"]`.
+
+## 4. Mission Parameters
+
+### Inputs:
+*   The provided source code for the Gemini Bridge project.
+*   Feature requirements from `docs/inception/must_should_have_features.md`.
+*   Problem statement from `docs/inception/product_requirements.md`.
+
+### Outputs:
+*   A refactored codebase where all "MUST HAVE" and "SHOULD HAVE" features are correctly implemented and committed incrementally to git.
+*   New `pytest` tests covering the implemented features.
+
+### Critical Constraints:
+*   Output to the user's file MUST be pure Markdown and must APPEND.
+*   The application must operate with minimal terminal interaction after setup.
+
+## 5. Task-Specific Resilient Guidelines
+
+1.  **Fix Before Feature:** Always ensure the application is in a working state before adding new features.
+2.  **Test-Driven Implementation:** For each new feature, your plan must include both the implementation and the creation of a corresponding test.
+3.  **Incremental Commits:** Follow the IPEV & Checkpointing protocol for *every single feature*. Do not batch multiple features into one commit.
+
+## 6. Success Criteria & Verification Strategy
+
+**Mission Complete When:**
+*   All 11 features from `docs/inception/must_should_have_features.md` are implemented and committed.
+*   `python main.py` runs the application successfully.
+*   `pytest` passes with 100% success.
+
+**Verification Methods:**
+*   `pytest` for automated testing.
+*   Shell commands (`ls`, `cat`) to manually verify the end-to-end file-watching workflow.
+
+## 7. Enhanced Execution Flow
+
+1.  **Initialize:** Acknowledge these instructions and the new two-tiered checkpointing protocol. Perform an initial health check with `ls -F` and `git status`.
+2.  **Survey (Directives):** Use `DIRECTIVE` to read `session_manager.py`, `gemini_bridge.py`, and `docs/inception/must_should_have_features.md`.
+3.  **Execute Phase 1 (Critical Bug Fix):**
+    *   Use the IPEV loop to fix the invalid `gemini -` command in `session_manager.py`.
+    *   For your **VERIFY** step, create a new test in `test_session_manager.py` that confirms `start_session()` now works.
+    *   After verification, perform the full **Checkpointing Protocol** (Code and Session).
+4.  **Execute Phase 2 (Feature Implementation):**
+    *   Systematically work through each "MUST HAVE" and "SHOULD HAVE" feature. For each one:
+        *   Follow the full IPEV loop.
+        *   Follow the full Checkpointing Protocol upon success.
+        *   Wait for my "CONTINUE" signal before starting the next feature.
+5.  **Final Verification:**
+    *   Run the full `pytest` suite one last time.
+    *   Perform a final end-to-end manual verification.
+6.  **Complete:** Announce mission completion and perform a final checkpoint.
+
+Now, begin with the initialization and survey steps.
+
