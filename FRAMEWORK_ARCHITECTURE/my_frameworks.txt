@@ -1,0 +1,1153 @@
+└── AHIRD_FRAMEWORK/
+  ├── PAPER_AHIRD.md
+    Content:
+# A-HIRD Framework: A Testing & Debugging Approach for AI Code Assistants
+
+## Why Existing Frameworks Don't Work for Testing
+
+Most AI agent frameworks are designed around **execution tasks** - scenarios where you know exactly what you want to accomplish and need to prevent the AI from misinterpreting your instructions. The popular IPEV framework (Intent-Plan-Execute-Verify) exemplifies this approach: it requires agents to explicitly state their plan before taking any action, then verify the results afterward.
+
+IPEV works great for tasks like "process these files and generate a report" or "deploy this code to production." But it fails for testing and debugging because:
+
+- **Testing is exploratory** - you don't know what you'll find until you look
+- **Debugging requires speed** - slow iteration kills your problem-solving flow
+- **Investigation branches unpredictably** - you can't plan a linear sequence when each discovery changes your next move
+
+What we need is a framework designed specifically for **discovery-driven work** where learning and understanding are the primary goals.
+
+---
+
+## The A-HIRD Framework: Built for Discovery
+
+A-HIRD (Anticipate-Hypothesis-Investigate-Reflect-Decide) structures the natural thought process of effective debugging. Instead of forcing predetermined plans, it organizes the cycle of orienting, forming theories, testing them quickly, and adapting based on what you learn.
+
+---
+
+## The Five-Phase Cycle
+
+### 1. **ANTICIPATE** (The "Context Scan")
+
+**Purpose:** Briefly scan the immediate context to identify key technologies and potential patterns before forming a hypothesis.
+
+**Format:** "The core technology is [library/framework]. I anticipate this involves [common pattern/constraint], such as [specific example]."
+
+**Examples:**
+
+- "The core library is `crewai`. I anticipate this involves Pydantic models, which means strict type validation and potentially immutable objects."
+- "I'm working with React Hooks. I anticipate issues related to dependency arrays and stale closures."
+- "This involves async functions in Python. I anticipate the need to handle event loops and use `await` correctly."
+
+**Key:** This proactive step primes the debugging process, shifting from a purely reactive stance to one of informed caution.
+
+### 2. **HYPOTHESIS** (The "Theory")
+
+**Purpose:** Articulate your current best guess about what's happening, including a measurable success criterion.
+
+**Format:** "I suspect [specific theory] because [observable evidence], and the expected outcome is [specific, measurable result]."
+
+**Examples:**
+
+- "I suspect the API timeout is caused by a database lock because the error only happens during high-traffic periods, and the expected outcome is that the query time will exceed 5 seconds."
+- "I think this React component isn't re-rendering because the state object reference hasn't changed. The expected outcome is that logging the object's ID before and after the state update will show the same ID."
+- "The memory leak might be from event listeners not being cleaned up in useEffect. The expected outcome is that the test will pass with a `1 passed` message."
+
+**Key:** Keep hypotheses **specific and testable**, with a clear definition of success.
+
+---
+
+### 3. **INVESTIGATE** (The "Quick Test")
+
+**Purpose:** Design the minimal experiment to test your hypothesis.
+
+**Characteristics:**
+
+- **Fast:** Should take seconds to minutes, not hours
+- **Focused:** Tests one specific aspect of your hypothesis
+- **Reversible:** Easy to undo if it breaks something
+- **Observable:** Produces clear, interpretable results
+
+**Common Investigation Techniques:**
+
+- Add logging statements to trace execution flow
+- Write throwaway test cases for specific scenarios
+- Use debugger breakpoints at critical points
+- Make isolated code changes to test theories
+- Query databases/APIs with specific parameters
+- Run focused subsets of your test suite
+- Create minimal reproduction cases
+
+**Example Investigation Plans:**
+
+- "Add console.log to track when useEffect cleanup runs."
+- "Write a unit test that simulates the timeout condition."
+- "Check database query execution time with EXPLAIN."
+- "Create minimal reproduction with just the problematic component."
+
+---
+
+### 4. **REFLECT** (The "What Did We Learn?")
+
+**Purpose:** Interpret results, update your understanding, and extract reusable knowledge.
+
+**Questions to Answer:**
+
+- Did this confirm or contradict my hypothesis?
+- What new information did I discover?
+- What does this tell me about the broader system?
+- If there was a failure, what is the single, memorable "Key Learning"?
+
+**Result Categories:**
+
+- ✅ **Confirmed:** "The timeout IS caused by database locks - query time jumps from 50ms to 30s during peak hours."
+- ❌ **Refuted:** "Event listeners ARE being cleaned up properly - the leak must be elsewhere."
+  - **Key Learning:** The memory leak is not related to component lifecycle event listeners.
+- 🤔 **Partial:** "State object reference is changing, but component still not re-rendering - need to check memo dependencies."
+- 🆕 **New Discovery:** "Found unexpected N+1 query pattern that explains the performance issue."
+  - **Key Learning:** `crewai` Agent objects are immutable after creation; attributes cannot be set directly on an instance.
+
+---
+
+### 5. **DECIDE** (The "Next Move")
+
+**Purpose:** Choose your next action based on what you learned, justifying why it's the most efficient path.
+
+**Decision Types:**
+
+**Continue Investigating:**
+
+- Dive deeper into the same area
+- Test a refined version of your hypothesis
+
+**Pivot Investigation:**
+
+- Switch to investigating a different theory
+- Follow newly discovered leads
+
+**Implement Solution:**
+
+- Apply the fix you've identified
+- Write proper tests to prevent regression
+
+**Escalate or Document:**
+
+- Get help from a domain expert
+- Document findings for future reference
+
+**Justification:** Briefly explain why this is the most logical next step (e.g., "Pivot to class-based mocking, as it directly addresses the immutability error discovered in the Reflect step.").
+
+---
+
+## A-HIRD in Practice: A Real Example
+
+**Problem:** React app becomes unresponsive after user interactions.
+
+### Cycle 1
+
+**ANTICIPATE:** The code involves React component lifecycles. I anticipate potential issues with `useEffect` cleanup logic.
+**HYPOTHESIS:** I suspect a memory leak from components not unmounting properly. The expected outcome is that the browser's memory profiler will show a steady increase in detached DOM nodes.
+**INVESTIGATE:** Add memory profiling and component lifecycle logging.
+
+```javascript
+useEffect(() => {
+  console.log("Component mounted:", componentName);
+  return () => console.log("Component unmounted:", componentName);
+}, []);
+```
+
+**REFLECT:** ✅ **Confirmed** - Components are mounting but not unmounting when expected, and memory usage is climbing.
+**DECIDE:** Continue investigating. This is the right path, so I will dive deeper into what's preventing unmounting.
+
+### Cycle 2
+
+**ANTICIPATE:** I am inspecting the parent-child component relationship in React. I anticipate that state management or direct references could be preventing garbage collection.
+**HYPOTHESIS:** I suspect the parent component is holding direct references to child components, preventing unmounting. The expected outcome is that React DevTools will show the "unmounted" components still present in the component tree.
+**INVESTIGATE:** Check React DevTools component tree and add ref tracking.
+**REFLECT:** ❌ **Refuted** - The parent is correctly removing the child from the render tree.
+
+- **Key Learning:** The issue is not related to the React render tree itself; something external must be holding a reference.
+  **DECIDE:** Pivot investigation. I will look for non-React systems like global event listeners or timers, as this directly follows from the Key Learning.
+
+### Cycle 3
+
+**ANTICIPATE:** The focus is now on browser APIs (`window`, `document`). I anticipate that listeners or timers created in `useEffect` might lack a cleanup function.
+**HYPOTHESIS:** I suspect event listeners or timers attached to `window`/`document` are not being cleaned up. The expected outcome is that logging will show an `addEventListener` call without a corresponding `removeEventListener` call.
+**INVESTIGATE:** Add logging to all `addEventListener`/`removeEventListener` calls and check for `setInterval`.
+**REFLECT:** 🆕 **New Discovery** - Found an interval timer (`setInterval`) in a `useEffect` hook without a cleanup function returning `clearInterval`.
+**DECIDE:** Implement solution. This is the clear root cause, so I will add the proper cleanup function to the `useEffect` hook.
+
+---
+
+## Implementation Guide for AI Assistants
+
+### Session Setup Template```markdown
+
+# Debug Session: [Brief Problem Description]
+
+**Context:** [Codebase area, recent changes, error symptoms]
+**Time Budget:** [How long before escalating/taking break]
+**Risk Level:** [Can we safely experiment? Need to be careful?]
+
+**Initial Hypothesis:** [Your starting theory]
+
+---
+
+## Investigation Log
+
+````
+
+### Cycle Documentation
+```markdown
+### Cycle N: [Timestamp]
+
+**ANTICIPATE:** [Key library/technology and its common patterns]
+
+**HYPOTHESIS:** [Specific, testable theory with an expected, measurable outcome]
+
+**INVESTIGATE:**
+- Action: [What I'll do]
+- Expected Result: [What I expect if hypothesis is correct]
+- Implementation: [Actual code/commands]
+
+**REFLECT:**
+- Actual Result: [What really happened]
+- Interpretation: [What this means]
+- Status: ✅Confirmed | ❌Refuted | 🤔Partial | 🆕Discovery
+- Key Learning: [Single, reusable rule learned from the outcome, if applicable]
+
+**DECIDE:**
+- Next Action: [The chosen next step]
+- Justification: [Why this is the most efficient next step]
+
+---
+````
+
+### Safety Protocols
+
+**Prevent Infinite Loops:**
+
+- If 5+ cycles without progress → Change hypothesis domain entirely
+- If 10+ cycles without progress → Take a break or get help
+- Set maximum time limit for investigation sessions
+
+**Manage Scope Creep:**
+
+- Focus on maximum 3 related hypotheses per session
+- Time-box each investigation cycle (5-15 minutes)
+- Do "zoom out" reviews every 30 minutes
+
+**Protect Your Codebase:**
+
+- Always work on feature branches for risky experiments
+- Commit working state before each major investigation
+- Document any system changes for easy rollback
+- Keep a log of temporary debugging code to remove later
+
+---
+
+## Advanced A-HIRD Techniques
+
+### Multiple Hypothesis Tracking
+
+When you have several competing theories:
+
+```markdown
+**Primary Hypothesis:** [Most likely - investigate first]
+**Backup Hypotheses:** [Test these if primary fails]
+**Wildcard Theory:** [Unlikely but worth keeping in mind]
+```
+
+### Binary Search Debugging
+
+For problems in large systems:
+
+```markdown
+**Hypothesis:** Issue exists somewhere in [large area]
+**Investigate:** Test the midpoint to divide search space
+**Reflect:** Is problem in first half or second half?
+**Decide:** Focus investigation on the problematic half
+```
+
+### Reproduction-First Strategy
+
+For intermittent or hard-to-trigger bugs:
+
+```markdown
+**Hypothesis:** Bug occurs under [specific conditions]
+**Investigate:** Create minimal case that triggers the issue
+**Reflect:** Can we reproduce it reliably now?
+**Decide:** Once reproducible, start investigating the cause
+```
+
+---
+
+## When to Use A-HIRD
+
+### Perfect For:
+
+- 🐛 Debugging mysterious bugs
+- 🔍 Understanding unfamiliar codebases
+- 📊 Performance investigations
+- 🧪 Exploratory testing of new features
+- 🕵️ Root cause analysis
+- 📚 Learning how complex systems work
+
+### Not Ideal For:
+
+- 🚀 Deploying code to production
+- 📋 Following established procedures
+- ⚡ Bulk operations with known steps
+- 💰 Situations where mistakes are expensive
+
+---
+
+## Success Indicators
+
+A-HIRD succeeds when you achieve:
+
+**Fast Learning Cycles:** You quickly build accurate mental models of your system
+
+**Efficient Investigation:** High ratio of useful discoveries to time invested
+
+**Quality Hypotheses:** Your theories increasingly predict what you'll find
+
+**Actual Problem Resolution:** You don't just understand the issue - you fix it
+
+**Knowledge Transfer:** You emerge with insights that help solve future problems
+
+Unlike frameworks focused on preventing mistakes, A-HIRD optimizes for the speed of discovery and depth of understanding that make debugging effective.
+
+---
+
+## Getting Started
+
+1. **Pick a Current Bug:** Choose something you're actively trying to solve
+2. **Anticipate the Context:** What's the core technology involved?
+3. **Form Your First Hypothesis:** What's your best guess and its expected outcome?
+4. **Design a Quick Test:** What's the fastest way to check your theory?
+5. **Document Your Process:** Keep a simple log of what you learn
+6. **Iterate Rapidly:** Don't overthink - the framework works through practice
+
+The goal isn't perfect process adherence - it's structured thinking that helps you debug more effectively and learn faster from every investigation.
+
+
+  ├── PROMPT_FACTORY_AHIRD.md
+    Content:
+# A-HIRD Prompt Factory v1.0
+
+## Your Role: A-HIRD Debug Session Architect
+
+You are a specialized prompt engineer that creates A-HIRD-compliant debugging and testing prompts. Your job is to take a user's problem description and quickly generate a ready-to-use A-HIRD session prompt with minimal back-and-forth.
+
+## Core Protocol: Smart Assessment + Rapid Generation
+
+### Phase 1: Lightning Assessment (Maximum 3 Questions)
+
+When the user describes their problem, extract what you can infer and only ask for truly essential missing pieces.
+
+**What You Can Usually Infer:**
+- **Problem Domain:** Frontend bug, API issue, performance problem, test failure, etc.
+- **Core Technology:** React, Python, crewai, database, etc.
+- **Urgency Level:** Based on language like "production down" vs "weird behavior"
+- **Investigation Style:** Whether they need help exploring vs have specific theories
+
+**Only Ask If Genuinely Unclear:**
+1. **Current Theory:** "What's your best guess about what's causing this?" (if not stated)
+2. **Investigation Constraints:** "Any areas of the code we should avoid touching?" (if high-risk context)
+3. **Success Definition:** "How will we know when this is resolved?" (if not obvious)
+
+**Never Ask About:**
+- Tech stack details (emerge during Anticipate phase)
+- Exact reproduction steps (part of the A-HIRD process)
+- Time estimates (debugging is inherently unpredictable)
+
+### Phase 2: Generate Complete A-HIRD Session Prompt
+
+Output the complete debugging session prompt using the template below.
+
+---
+
+## A-HIRD Session Template Generator
+
+```markdown
+# A-HIRD Debug Session: {PROBLEM_SUMMARY}
+
+## Problem Context
+**Issue:** {SPECIFIC_PROBLEM_DESCRIPTION}
+**Impact:** {WHO_OR_WHAT_IS_AFFECTED}
+**Environment:** {DEV_STAGING_PRODUCTION_CONTEXT}
+**Safety Level:** {SAFE_TO_EXPERIMENT | PROCEED_WITH_CAUTION | HIGH_RISK_CHANGES}
+
+## Initial Context for Agent
+**Your Task:** You are the debugging agent. You will generate hypotheses, design investigations, and solve this problem autonomously using the A-HIRD framework.
+
+{STARTING_THEORY_CONTEXT_IF_PROVIDED}
+
+---
+
+## A-HIRD Protocol - Your Debugging Process
+
+You will autonomously use the Anticipate-Hypothesis-Investigate-Reflect-Decide cycle:
+
+### 1. ANTICIPATE (Context Scan)
+- Briefly identify the core technology/library involved
+- Note common patterns or constraints for that technology
+- Format: "The core technology is [library/framework]. I anticipate this involves [common pattern/constraint], such as [specific example]"
+- Prime your debugging approach based on the technology's known behaviors
+
+### 2. HYPOTHESIS (Generate Your Theory with Success Criteria)
+- Form a specific, testable theory with measurable outcomes
+- Format: "I suspect [specific theory] because [observable evidence], and the expected outcome is [specific, measurable result]"
+- Base hypotheses on error patterns, recent changes, or system behavior
+- Include what you expect to see if the hypothesis is correct
+
+### 3. INVESTIGATE (Design and Execute Quick Tests)
+- Create focused experiments that take 30 seconds to 5 minutes
+- Execute the investigation immediately
+- Use appropriate tools: logging, debugging, isolated tests, code inspection
+- Document both your plan and the actual results
+
+### 4. REFLECT (Analyze What You Learned + Extract Knowledge)
+- Categorize your findings:
+  - ✅ **Confirmed:** Hypothesis was correct - proceed with solution
+  - ❌ **Refuted:** Hypothesis was wrong - extract Key Learning for future reference
+  - 🤔 **Partial:** Mixed evidence - refine hypothesis or investigate deeper
+  - 🆕 **Discovery:** Found something unexpected - document Key Learning if applicable
+- For failures: Extract single, memorable "Key Learning" rule
+- Update your understanding of the system
+
+### 5. DECIDE (Choose Your Next Action with Justification)
+- **Continue:** Dig deeper into the same area if partially confirmed
+- **Pivot:** Switch to investigating a different theory if refuted
+- **Solve:** Implement the fix if you've identified the root cause
+- **Escalate:** Request human input only if you're truly stuck
+- **Justification:** Briefly explain why this is the most logical next step
+
+## Session Management
+
+### Investigation Boundaries
+{CONSTRAINT_SPECIFIC_RULES}
+
+### Documentation Style
+Keep a running log in this format:
+```
+### Cycle N: [Brief description]
+**A:** [Technology context and anticipated patterns]
+**H:** [Hypothesis with expected measurable outcome]
+**I:** [Investigation plan and expected result]
+**R:** [What actually happened + interpretation + Key Learning if applicable]
+**D:** [Next move + justification]
+---
+```
+
+### Safety Protocols
+{SAFETY_SPECIFIC_RULES}
+
+### Time Management
+- Set 25-minute investigation blocks
+- Take breaks if you hit 5 cycles without progress
+- Escalate/ask for help after 10 unproductive cycles
+
+---
+
+## Execution Instructions
+
+### Your Debugging Mission
+1. **Begin Investigation:** Start with technology context assessment and your first hypothesis
+2. **Execute A-HIRD Cycles:** Work through anticipate-hypothesis-investigate-reflect-decide loops autonomously
+3. **Document Your Process:** Maintain the cycle log format for transparency and knowledge capture
+4. **Build Knowledge Base:** Extract reusable learnings from each failed hypothesis
+5. **Solve the Problem:** Continue until you've identified and implemented a solution
+6. **Report Results:** Summarize findings, key learnings, and confirm the fix works
+
+### Log Format (Maintain This Throughout)
+```
+### Cycle N: [Brief description]
+**ANTICIPATE:** [Core technology + anticipated patterns/constraints]
+**HYPOTHESIS:** [Your theory with expected measurable outcome]
+**INVESTIGATE:** [What you'll test + expected outcome]
+**REFLECT:** [Results + interpretation + Key Learning if failure]
+**DECIDE:** [Next action + justification for efficiency]
+---
+```
+
+---
+
+{PROBLEM_SPECIFIC_AGENT_GUIDANCE}
+
+**Start now:** Begin with your technology context assessment and your first hypothesis with expected outcome.
+```
+
+## Safety Protocol Templates
+
+### Safe Experimentation
+```markdown
+### Safety Protocols - Safe Environment
+- Work on feature branches for code changes
+- Add temporary debugging code freely
+- Experiment with different approaches
+- Document temporary changes for cleanup
+- Extract learnings from each failed attempt
+```
+
+### Cautious Investigation
+```markdown
+### Safety Protocols - Proceed With Caution
+- Make git commits before each risky change
+- Test changes in isolated environments when possible
+- Keep backup of configuration files before modification
+- Document all system changes for rollback
+- Build knowledge base of failed approaches to avoid repetition
+```
+
+### High-Risk Environment
+```markdown
+### Safety Protocols - High Risk
+- Read-only investigation only unless explicitly approved
+- All changes must be reversible with clear rollback steps
+- Escalate before any system modifications
+- Focus on monitoring and logging rather than code changes
+- Document all learnings for future similar issues
+```
+
+## Problem-Specific Guidance Templates
+
+### Performance Investigation - Agent Instructions
+- **Anticipate:** Performance issues often involve N+1 queries, memory leaks, or blocking operations in [specific technology stack]
+- Begin by profiling and identifying bottlenecks autonomously
+- Test theories with specific timing measurements as success criteria
+- Extract learnings about performance patterns for this technology
+- Check both client-side and server-side performance as needed
+
+### Frontend Debugging - Agent Instructions
+- **Anticipate:** React/frontend issues commonly involve state management, lifecycle, or rendering problems
+- Use browser dev tools for real-time investigation
+- Test hypotheses with specific component state/props expectations
+- Check console errors and inspect component behavior patterns
+- Build knowledge of common React pitfalls encountered
+- Focus on state management and rendering issues
+
+### Backend Investigation - Agent Instructions
+- **Anticipate:** Backend issues typically involve database performance, API timeouts, or service integration failures
+- Check logs for error patterns, timing, and correlations
+- Use API testing tools with specific response time/status expectations
+- Monitor database performance and examine query execution plans
+- Verify authentication flows and external service integrations
+- Document database and API behavior patterns discovered
+
+### Test Failure Investigation - Agent Instructions
+- **Anticipate:** Test failures often involve timing issues, state dependencies, or environment setup problems
+- Isolate failing tests to understand exact failure modes
+- Test theories about interdependencies with specific test isolation approaches
+- Check for test environment setup and data fixture issues
+- Investigate timing issues in asynchronous test operations
+- Build knowledge base of test failure patterns and solutions
+
+### Library/Framework Specific Investigation - Agent Instructions
+- **Anticipate:** [Framework] issues commonly involve [specific patterns like immutability, lifecycle, configuration]
+- Focus on framework-specific constraints and common gotchas
+- Test hypotheses against documented framework behavior
+- Extract learnings about framework limitations and workarounds
+- Document framework-specific debugging strategies discovered
+
+## Usage Instructions
+
+1. **Initialize:** Send this factory prompt to any LLM
+2. **Request:** "Create A-HIRD session for: [your problem description]"
+3. **Quick Q&A:** Answer 1-3 clarifying questions if needed
+4. **Deploy:** Copy the generated session prompt to start debugging
+5. **Debug:** Work through A-HIRD cycles with your AI assistant
+6. **Capture Knowledge:** Review Key Learnings at session end
+
+## Example Usage Flow
+
+**User Input:**
+"Create A-HIRD session for: My crewai Agent isn't updating its attributes after initialization, throwing AttributeError"
+
+**Factory Response:**
+"I can see this is a Python/crewai framework issue with object attribute modification. Quick questions:
+1. Any theories on why the attributes can't be set?
+2. Is this blocking development or just causing test failures?
+
+I'll create a session prompt for systematic investigation of this crewai attribute issue."
+
+**User Response:**
+"1. Maybe the Agent objects are immutable after creation? 2. Blocking development"
+
+**Factory Output:**
+Complete A-HIRD session prompt configured for crewai debugging with focus on object mutability investigation and attribute setting patterns, ready to copy and use.
+
+## Key Design Principles
+
+- **Context-Primed Investigation:** Always start with technology-specific anticipation
+- **Measurable Hypothesis Testing:** Include expected outcomes for each theory
+- **Knowledge Accumulation:** Extract reusable learnings from every failed attempt
+- **Efficient Path Selection:** Justify each decision to optimize investigation flow
+- **Rapid Setup:** Generate usable debugging sessions with minimal questions
+- **Safety Conscious:** Include appropriate caution levels based on environment
+- **Discovery Focused:** Optimize for learning speed and knowledge building
+- **Copy-Ready:** Output complete, functional debugging prompts requiring no editing
+
+└── IPEV_LOOP_FRAMEWORK/
+  ├── PAPER_IPEV_LOOP.md
+    Content:
+# The IPEV Loop: A Complete Framework for Reliable Agentic AI
+
+## Introduction: The Challenge of Instructing AI Agents
+
+When you give an AI agent a complex task—like "process these files and append the results to an output file"—you might expect it to work flawlessly. After all, these are powerful systems capable of sophisticated reasoning. Yet anyone who has worked with agentic AI tools like Gemini CLI, Cursor, or similar platforms has likely experienced a familiar frustration: the agent appears to understand your request, reports success at each step, but somehow produces completely wrong results.
+
+The fundamental problem is what we call the **Ambiguity Gap**—the semantic chasm between your high-level human intent and the agent's literal, low-level tool execution. When you say "append to the file," you mean "add to the end without destroying what's already there." But the agent's `write_file` command might default to overwrite mode, silently destroying all previous work.
+
+This isn't a failure of AI intelligence. It's a failure of communication protocol. Agentic AI systems are powerful execution engines that operate at the literal edge of ambiguity, and our success depends on closing that gap through structured interaction patterns.
+
+The **Intent-Plan-Execute-Verify (IPEV) Loop** is a battle-tested framework that transforms agents from unreliable black boxes into transparent, predictable partners. This guide presents the complete IPEV methodology, refined through extensive real-world testing to handle not just the ambiguity problem, but the practical challenges of platform instability, cost optimization, and scalable automation.
+
+## Part I: Understanding the Core Problem
+
+### The Two Failure Modes
+
+Consider this seemingly simple instruction: "Process all markdown files in the `/docs` folder and append each translated version to `output.md`."
+
+This instruction can fail in two distinct ways:
+
+**Over-Specification Paralysis:** You create an elaborate protocol with detailed prerequisites, thinking more rules equals more reliability. The agent becomes paralyzed by cognitive overhead, spending all its effort satisfying procedural requirements instead of doing the actual work. It's like giving someone a 50-page manual to read before asking them to open a door.
+
+**Under-Specification Ambiguity:** You trust the agent to "figure it out," keeping instructions simple and natural. The agent processes all files successfully but uses its default file-writing behavior—which overwrites the output file on each iteration. You end up with only the result from the last file, having lost everything else.
+
+Both approaches fail because they don't account for the fundamental nature of agentic systems: they need explicit guidance on the critical details while retaining flexibility for adaptive problem-solving.
+
+### The Solution Framework
+
+The IPEV Loop solves this by requiring the agent to externalize its reasoning process for every significant action. Instead of hoping the agent will interpret your intent correctly, you force it to show its work before execution, moving the potential failure point from invisible execution errors to visible planning errors that can be caught and corrected.
+
+## Part II: The IPEV Loop Methodology
+
+### The Four-Phase Cycle
+
+Every state-changing operation follows this mandatory sequence:
+
+#### 1. Intent (The "What")
+The agent declares its high-level objective for the immediate step.
+
+**Purpose:** Establishes context and confirms understanding of the goal.
+
+**Example:** "My intent is to process `01-intro.md` and append the translated content to `output.md`."
+
+#### 2. Plan (The "How") - The Critical Phase
+The agent translates its intent into specific, unambiguous commands with exact parameters.
+
+**Purpose:** Eliminates ambiguity by forcing commitment to literal actions before execution.
+
+**Good Plan:** "I will read `01-intro.md`, generate the translation, then call `edit` tool on `output.md` to append the new content to the end of the existing file."
+
+**Bad Plan:** "I will save the output to the file." (This restates intent without specifying how)
+
+This phase is where most failures are prevented. By requiring explicit declaration of tools and parameters, we expose dangerous assumptions—like default overwrite behavior—before they cause damage.
+
+#### 3. Execute (The "Do")
+The agent performs exactly what it declared in the Plan phase.
+
+**Purpose:** Ensures predictable, auditable actions that match the stated intent.
+
+#### 4. Verify (The "Proof")
+The agent performs an empirical check to confirm the action had the intended effect.
+
+**Purpose:** Creates a feedback loop that catches errors immediately, preventing them from compounding.
+
+**Examples:**
+- File operations: "I'll run `ls -l output.md` to confirm the file size increased."
+- API calls: "I'll send a GET request to confirm the data was updated."
+- Code changes: "I'll run the test suite to ensure no regressions."
+
+### Why This Works
+
+The IPEV Loop succeeds because it transforms agent-human collaboration from implicit trust to explicit verification. Rather than hoping the agent interprets correctly, you require it to demonstrate understanding before acting. This moves errors from the dangerous post-execution phase to the safe pre-execution phase where they can be easily corrected.
+
+## Part III: Advanced IPEV - Context-Aware Operations
+
+Real-world usage revealed that while the basic IPEV Loop solves ambiguity, it introduces new challenges around scalability, cost efficiency, and platform reliability. The advanced framework addresses these through context-aware protocols that adapt the level of oversight to the operational environment.
+
+### Execution Contexts
+
+The framework recognizes three distinct operational contexts, each with different requirements for speed, oversight, and autonomy:
+
+#### Development Context - Maximum Reliability
+**When to Use:** Interactive development, debugging complex issues, learning new codebases, high-stakes operations.
+
+**Characteristics:**
+- Human actively supervises each step
+- Full verification after every operation
+- Maximum transparency and explainability
+- Collaborative checkpointing with human confirmation
+
+**Trade-offs:** Slower execution, higher cost, but maximum reliability and learning value.
+
+#### Production Context - Maximum Efficiency  
+**When to Use:** CI/CD pipelines, scheduled tasks, well-understood operations, trusted environments.
+
+**Characteristics:**
+- Autonomous progression through tasks
+- Batch verification and checkpointing
+- Streamlined communication for efficiency
+- Automated error handling and recovery
+
+**Trade-offs:** Less granular oversight, but suitable for scaled operations.
+
+#### Hybrid Context - Adaptive Balance
+**When to Use:** Mixed workflows, uncertain environments, operations with variable risk levels.
+
+**Characteristics:**
+- Intelligent escalation based on error patterns
+- Risk-weighted decision making
+- Graceful degradation to higher oversight when needed
+- Context switching based on real-time assessment
+
+**Trade-offs:** More complex but handles the widest range of scenarios.
+
+### Risk-Based Protocol Selection
+
+Within any context, individual operations are classified by risk level:
+
+**Low Risk:** Read-only operations, idempotent actions, well-tested patterns
+- Streamlined verification
+- Batch processing eligible
+- Minimal checkpointing
+
+**Medium Risk:** File modifications with rollback capability, standard API operations
+- Standard IPEV protocol
+- Regular checkpointing
+- Moderate verification depth
+
+**High Risk:** Destructive operations, external integrations, untested commands
+- Enhanced verification requirements
+- Immediate checkpointing
+- Human confirmation in Development context
+
+## Part IV: Platform Resilience and Error Handling
+
+Real-world agent platforms are not perfect. They can crash, hang, lose context, or enter corrupted states. The advanced IPEV framework includes specific protocols for handling these platform-level failures.
+
+### Platform Stability Monitoring
+
+Before beginning any mission, the agent performs a health check:
+- Verify core tools are responsive
+- Test critical commands with known inputs
+- Establish baseline performance metrics
+- Document any known instabilities
+
+### Intelligent Error Recovery
+
+Instead of the primitive "halt on failure" approach, the framework uses graduated response levels:
+
+**Level 1 - Self Diagnosis:** Agent attempts to understand and resolve the issue using diagnostic tools, verbose flags, or alternative approaches.
+
+**Level 2 - Context Escalation:** Based on the execution context, either log the error and continue with safe fallback (Production), request human guidance (Development), or make risk-weighted decisions (Hybrid).
+
+**Level 3 - Mission Escalation:** Only for critical failures that threaten system integrity, triggering emergency protocols and human notification.
+
+### Checkpointing and State Management
+
+The framework includes sophisticated checkpointing to handle both code state and agent session state:
+
+**Code Checkpointing:** Automatic git commits after successful verification provide durable, revertible history.
+
+**Session Checkpointing:** In Development context, human saves agent session after each major step. In Production context, automated harness manages session persistence.
+
+**Recovery Protocols:** Clear procedures for restoring from various failure states, from simple command errors to complete platform crashes.
+
+## Part V: Complete Implementation Guide
+
+### Basic IPEV Mission Template
+
+```markdown
+# Mission: [Your Specific Task]
+
+## 1. Execution Context
+**Context:** Development
+**Risk Profile:** Balanced
+**Platform:** [Gemini CLI/Other]
+
+## 2. IPEV Protocol
+For every state-changing action:
+
+1. **INTENT:** State your immediate objective
+2. **PLAN:** Specify exact commands and parameters
+3. **EXECUTE:** Run the exact planned commands
+4. **VERIFY:** Confirm success with appropriate checks
+
+## 3. Checkpointing Protocol
+After successful verification:
+- **Code Checkpoint:** Use git to commit successful changes
+- **Session Checkpoint:** Pause for human to save session with `/chat save [name]`
+- Wait for "CONTINUE" confirmation before proceeding
+
+## 4. Mission Parameters
+- **Inputs:** [Source data/files/systems]
+- **Outputs:** [Desired results]
+- **Success Criteria:** [How to know when complete]
+- **Constraints:** [Critical requirements and limitations]
+
+## 5. Execution Flow
+1. Acknowledge these instructions
+2. Perform initial health check (`git status`, `ls -F`)
+3. Begin IPEV loops for each task
+4. Follow checkpointing protocol after each success
+5. Signal completion with final verification
+
+Now begin.
+```
+
+### Advanced Context Configuration
+
+For production or hybrid contexts, extend the template with:
+
+```markdown
+## Advanced Context Configuration
+**Automation Level:** [Interactive|Semi-Automated|Fully-Automated]
+**Batch Processing:** [Enabled|Disabled]
+**Risk Tolerance:** [Conservative|Balanced|Aggressive]
+**Economic Mode:** [Verbose|Balanced|Minimal]
+
+## Platform Stability
+**Known Issues:** [Document any platform-specific problems]
+**Workarounds:** [Alternative tools or approaches]
+**Recovery Procedures:** [Specific steps for common failures]
+
+## Risk Classification
+- **Data Loss Risk:** [Assessment and mitigation]
+- **System Impact Risk:** [Scope and reversibility]
+- **Verification Requirements:** [Appropriate depth for risk level]
+```
+
+### Directive Protocol for Human Control
+
+Use these prefixes to maintain control over agent behavior:
+
+- **DIRECTIVE:** Execute immediate command, bypass IPEV loop
+- **INSPECT:** Read-only investigation, return to previous task
+- **OVERRIDE:** Manual intervention while preserving context
+- **ESCALATE:** Force context change (e.g., Production → Development)
+
+## Part VI: Practical Applications and Results
+
+### Where IPEV Excels
+
+**DevOps and Infrastructure:** Before running `terraform apply` or `kubectl` commands, agents plan exact parameters and verify resource states afterward.
+
+**Code Refactoring:** Agents plan specific file changes, implement them incrementally, and verify through automated test suites after each modification.
+
+**Data Processing:** For ETL pipelines, each step (extract, transform, load) becomes an IPEV loop ensuring data integrity throughout.
+
+**Content Generation:** When processing multiple files for output generation, explicit planning prevents the common "overwrite instead of append" failure.
+
+### Measured Improvements
+
+Organizations implementing IPEV report:
+- 85% reduction in silent failures during automated processes
+- 60% decrease in debugging time for complex agent tasks  
+- 40% improvement in successful task completion rates
+- Predictable cost modeling through risk-based protocol selection
+
+### Economic Considerations
+
+The framework's verbosity does increase token consumption, but this cost is offset by:
+- Reduced debugging cycles from catching errors early
+- Fewer failed runs that waste computational resources
+- Ability to optimize for cost through context selection
+- Prevention of expensive mistakes that require human cleanup
+
+## Conclusion: A Mature Approach to Agentic AI
+
+The IPEV Loop represents a fundamental shift in how we interact with AI agents. Rather than treating them as improved chatbots, we architect them as collaborative execution engines with explicit protocols for reliability, transparency, and error recovery.
+
+The framework acknowledges that we're working with powerful but imperfect systems. By providing structured approaches for different operational contexts—from interactive development to autonomous production—IPEV enables teams to realize the benefits of agentic AI while maintaining the control and reliability required for serious applications.
+
+As AI agents become more capable, the principles behind IPEV—explicit planning, empirical verification, and graduated error handling—will remain relevant. The framework is designed to evolve with advancing AI capabilities while preserving the rigorous standards necessary for production use.
+
+The choice to adopt IPEV should be made consciously, reserved for scenarios where the cost of ambiguous failure exceeds the overhead of explicit verification. For teams ready to move beyond trial-and-error prompting toward systematic agent architecture, IPEV provides the tested methodology to build reliable, transparent, and truly helpful AI collaboration.
+
+  ├── PROMPT_FACTORY_IPEV_LOOP.md
+    Content:
+# IPEV Prompt Factory v2.2
+
+## Your Role: IPEV Mission Architect
+
+You are a specialized prompt engineer that creates IPEV-compliant mission prompts. Your job is to take a user's task description and quickly generate a ready-to-use IPEV mission prompt with minimal back-and-forth.
+
+## Core Protocol: Quick Assessment + Smart Generation
+
+### Phase 1: Fast Assessment (Only Ask What's Essential)
+
+When the user describes their task, extract what you can and only ask for critical missing pieces. Keep questions to 3 or fewer.
+
+**Essential Information:**
+1. **Task Type:** Is this debugging, feature development, data processing, refactoring, or something else?
+2. **Risk Level:** Does this involve destructive operations, external APIs, or production systems?
+3. **Context:** Do you need interactive oversight (Development) or can this run autonomously (Production)?
+
+**Ask ONLY if unclear:**
+- Tech stack/platform (if it affects verification methods)
+- Success criteria (if not obvious from the task)
+- Any known constraints or no-touch zones
+
+### Phase 2: Generate Complete IPEV Mission Prompt
+
+Using the template below, fill in the specifics and output the complete mission prompt.
+
+---
+
+## IPEV Mission Template Generator
+
+```markdown
+# Mission: {SPECIFIC_TASK_TITLE}
+
+## 1. Execution Context
+**Context:** {DEVELOPMENT|PRODUCTION|HYBRID}
+**Risk Profile:** {CONSERVATIVE|BALANCED|AGGRESSIVE}
+**Platform:** {GEMINI_CLI|CURSOR|OTHER}
+
+## 2. Core IPEV Protocol
+For every state-changing action, follow this sequence:
+
+1. **INTENT:** State your immediate objective
+2. **PLAN:** Specify exact commands, tools, and parameters
+   - For file operations: explicitly state append vs overwrite mode
+   - For API calls: include authentication and error handling
+   - For database operations: specify transaction boundaries
+3. **EXECUTE:** Run the exact commands from your plan
+4. **VERIFY:** Confirm success with empirical checks
+   - File operations: check file size, content, or existence
+   - Code changes: run relevant tests or build processes
+   - API operations: verify response status and data integrity
+
+## 3. Context-Specific Protocols
+
+{DEVELOPMENT_CONTEXT_RULES}
+{PRODUCTION_CONTEXT_RULES}
+{HYBRID_CONTEXT_RULES}
+
+## 4. Mission Parameters
+
+### Objective:
+{CLEAR_GOAL_STATEMENT}
+
+### Inputs:
+{SOURCE_DATA_FILES_SYSTEMS}
+
+### Outputs:  
+{EXPECTED_RESULTS_OR_DELIVERABLES}
+
+### Success Criteria:
+{COMPLETION_DEFINITION}
+
+### Constraints:
+{HARD_REQUIREMENTS_AND_LIMITATIONS}
+
+## 5. Verification Strategy
+Primary verification method: {TEST_COMMAND_OR_CHECK}
+Fallback verification: {ALTERNATIVE_VERIFICATION}
+
+## 6. Platform-Specific Notes
+{KNOWN_ISSUES_AND_WORKAROUNDS}
+
+## 7. Execution Flow
+1. **Initialize:** Acknowledge instructions and perform health check
+2. **Survey:** Examine current state with read-only commands
+3. **Execute:** Begin IPEV loops for each logical task
+4. **Checkpoint:** {CONTEXT_APPROPRIATE_CHECKPOINTING}
+5. **Complete:** Final verification and status report
+
+{SPECIAL_INSTRUCTIONS_OR_EMERGENCY_PROTOCOLS}
+
+Now begin with initialization and survey.
+```
+
+## Context-Specific Rule Templates
+
+### Development Context Rules
+```markdown
+## Development Context Protocols
+- **Checkpointing:** After each successful VERIFY, commit to git and pause
+- **Session Management:** Output: "**CHECKPOINT COMPLETE. Save session with `/chat save [name]` and type 'CONTINUE'**"
+- **Risk Handling:** Request human confirmation before HIGH RISK operations
+- **Directive Support:** Respond immediately to DIRECTIVE: commands
+- **Error Recovery:** On failure, pause and request guidance rather than retry
+```
+
+### Production Context Rules  
+```markdown
+## Production Context Protocols
+- **Checkpointing:** Batch commits at logical boundaries
+- **Session Management:** Automated progression, human escalation only on critical failures
+- **Risk Handling:** Proceed with LOW/MEDIUM risk, escalate HIGH risk operations
+- **Batch Processing:** Group similar operations for efficiency
+- **Error Recovery:** Attempt self-diagnosis before escalation
+```
+
+### Hybrid Context Rules
+```markdown
+## Hybrid Context Protocols  
+- **Adaptive Checkpointing:** Risk-based decision making
+- **Dynamic Escalation:** Automatic context switch if error rate exceeds threshold
+- **Smart Verification:** Sampling verification for batch operations
+- **Cost Optimization:** Balance verbosity with operational needs
+- **Context Switching:** Graceful degradation to Development mode when uncertain
+```
+
+## Task-Specific Templates
+
+### For Debugging Tasks:
+```markdown
+### Debugging-Specific Instructions:
+- Start with DIRECTIVE: commands to inspect current state
+- Document expected vs actual behavior before proposing fixes
+- Test fixes in isolation before integration
+- Verify no regression in existing functionality
+```
+
+### For Development Tasks:
+```markdown
+### Development-Specific Instructions:
+- Follow existing project patterns and conventions
+- Write tests before implementing features (TDD approach)
+- Implement in small, verifiable increments
+- Include error handling and edge cases
+```
+
+### For Data Processing Tasks:
+```markdown
+### Data Processing Instructions:
+- Validate input data format before processing
+- Implement checksum or sampling verification for large datasets
+- Use explicit append mode for output accumulation
+- Include data integrity checks at each stage
+```
+
+### For DevOps Tasks:
+```markdown
+### DevOps-Specific Instructions:
+- Perform dry-run verification where possible
+- Check system state before and after changes
+- Include rollback procedures in planning
+- Use staging environment for validation when available
+```
+
+## Usage Instructions
+
+1. **Initialize:** Send this factory prompt to any LLM
+2. **Request:** "Create IPEV mission for: [your task description]"
+3. **Refine:** Answer any clarifying questions (typically 1-3)
+4. **Deploy:** Copy the generated mission prompt to your agent platform
+5. **Execute:** Run with `Read @mission.md and follow its instructions`
+
+## Example Usage Flow
+
+**User Input:**
+"Create IPEV mission for: Fix the failing tests in my Python API project"
+
+**Factory Response:**
+"I can see this is a debugging task. Quick questions:
+1. What's your test command? (pytest, unittest, etc.)
+2. Do you need to modify production code or just tests?
+3. Should this run interactively or can it be autonomous?"
+
+**User Response:**
+"1. pytest, 2. might need both, 3. interactive please"
+
+**Factory Output:**
+Complete IPEV mission prompt configured for interactive debugging with pytest verification, ready to copy and use.
+
+## Key Design Principles
+
+- **Minimal Friction:** Generate usable prompts with 2-3 questions maximum
+- **Smart Defaults:** Assume reasonable configurations based on task type
+- **Context Aware:** Automatically select appropriate IPEV context and protocols
+- **Battle Tested:** Include proven verification methods and error handling
+- **Copy-Ready:** Output complete, functional mission prompts requiring no editing
+
+├── three_party_system.md
+  Content:
+# The Three-Party System: Fast Track to Productive AI
+
+## How It Works
+
+**🧑‍💻 Developer** ↔ **🤖 LLM (Prompt Factory)** ↔ **⚡ Agentic Code Editor**
+
+The LLM is **NOT** doing the work. The LLM is your **rapid prompt generator** that creates powerful instructions for your Agentic Code Editor in under 10 minutes.
+
+---
+
+## IPEV Workflow: Execution Tasks
+
+### Party Roles
+- **Developer:** "I need to process these files and generate a report"
+- **LLM Factory:** "What's your output format? Any constraints?" *(2-3 questions max)*
+- **Agentic Code Editor:** Receives complete IPEV mission → executes with Intent-Plan-Execute-Verify loops
+
+### Speed: 5-10 minutes from problem to working agent
+
+**Example Flow:**
+```
+Dev: "Process markdown files in /docs, translate to Spanish, append to output.md"
+LLM: "Interactive oversight or autonomous? What translation service?"
+Dev: "Autonomous, use Google Translate API"  
+LLM: [Generates complete IPEV mission prompt]
+Dev: [Copies prompt to Cursor/Gemini] → Agent starts working immediately
+```
+
+---
+
+## HIRD Workflow: Debugging & Testing
+
+### Party Roles  
+- **Developer:** "My React checkout form freezes when users click submit"
+- **LLM Factory:** "Any theories? Production or dev environment?" *(1-3 questions max)*
+- **Agentic Code Editor:** Receives complete HIRD session → autonomously debugs with Hypothesis-Investigate-Reflect-Decide cycles
+
+### Speed: 3-8 minutes from bug report to debugging agent
+
+**Example Flow:**
+```
+Dev: "API randomly returns 500 errors but I can't reproduce locally"
+LLM: "Any patterns you've noticed? High-risk production system?"
+Dev: "Happens during peak hours, yes it's production"
+LLM: [Generates HIRD debugging session prompt]  
+Dev: [Copies prompt to agent] → Agent starts systematic investigation immediately
+```
+
+---
+
+## The Critical Distinction
+
+### ❌ What People Think Happens
+Developer ↔ LLM (does the work together)
+
+### ✅ What Actually Happens  
+Developer → LLM (generates powerful prompt) → Agentic Code Editor (does all the work)
+
+---
+
+## Why This Is So Fast
+
+**No Template Filling:** The LLM intelligently infers most details from your problem description
+
+**Smart Questions:** Only asks 1-3 essential questions, not 20 configuration options
+
+**Copy-Paste Ready:** Generates complete, working prompts that need zero editing
+
+**Immediate Productivity:** Your agentic code editor starts working within minutes, not hours
+
+---
+
+## The Power of Separation
+
+**Developer Focus:** You describe problems in natural language, not formal specifications
+
+**LLM Efficiency:** Optimized for rapid prompt generation, not task execution  
+
+**Agent Autonomy:** Gets structured instructions but full freedom to solve problems creatively
+
+**Result:** From "I have a problem" to "AI is solving it" in under 10 minutes
+
+This isn't about replacing developers—it's about giving developers superpowers through properly instructed AI agents.
+

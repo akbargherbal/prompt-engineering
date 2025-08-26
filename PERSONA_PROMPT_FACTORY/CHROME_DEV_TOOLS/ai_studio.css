@@ -1,0 +1,56 @@
+/* --- AI Studio Accessibility Overrides --- */
+/* 1. MODEL RESPONSE: Increase font size for readability */
+span.ng-star-inserted {
+    font-size: 22px !important;
+    line-height: 1.8 !important;
+    /* or higher, up to 2.0 */
+    /* Add letter spacing if needed */
+    letter-spacing: 0.05em !important;
+
+    /* Word spacing */
+    /* word-spacing: 0.1em !important; */
+}
+
+
+span.ng-star-inserted * code {
+    font-size: 18px !important;
+}
+
+div.header-container * {
+    font-size: 14px !important;
+    padding: 2px !important;
+}
+
+section ms-toolbar * {
+    display: none !important;
+}
+
+mat-accordion {
+    display: none !important;
+}
+
+ms-header-root {
+    display: none !important;
+}
+
+
+ms-autoscroll-container {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
+
+
+.user-chunk * .ng-star-inserted {
+    font-size: 16px !important;
+}
+
+pre code * {
+    font-size: 18px !important;
+}
+
+.chat-view-container div:has(mat-accordion) {
+    border-bottom-width: 4px !important;
+    border-bottom-color: #728370 !important;
+    padding : 2px !important;
+    margin: 2px !important;
+}
