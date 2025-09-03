@@ -1,3 +1,21 @@
+"""
+This script processes a local directory to create a single, consolidated text file
+that represents an entire codebase. Its primary purpose is to package a project's
+source code into a format suitable for analysis by a Large Language Model (LLM).
+
+The ultimate beneficiary is a developer who wants to feed the full context of a
+project to an AI assistant (like GPT-4, Claude, or Gemini) to perform tasks such
+as refactoring, debugging, or generating comprehensive documentation.
+
+Key features include:
+- Recursive directory traversal with customizable ignore patterns.
+- Conversion of Jupyter Notebooks (.ipynb) to Markdown.
+- File content concatenation into a structured output.
+- Token counting to respect LLM context window limits.
+- Automatic splitting of the output if it exceeds a token threshold.
+"""
+
+
 import os
 import sys
 import argparse

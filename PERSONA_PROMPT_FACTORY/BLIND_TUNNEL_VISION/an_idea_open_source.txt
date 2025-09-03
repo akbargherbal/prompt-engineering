@@ -1,0 +1,13 @@
+If GitHub were the Library of Congress—
+a vast archive containing works from every discipline and language—
+then GitHub would be the same, but for code:
+a repository of countless apps, spanning fields and frameworks, written in languages some of us barely know.
+Imagine the average visitor wandering through this library.
+They might stumble upon a manuscript written twelve centuries ago,
+debating theological polemics between Islamic schools of Hadith—
+a text dense with context, terminology, and history they can only partially grasp.
+Isn’t that what it feels like for the average programmer
+browsing open-source projects?
+Reading code they partly understand,
+in disciplines they only vaguely recognize,
+with histories they know nothing about?
